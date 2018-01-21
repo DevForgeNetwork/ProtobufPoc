@@ -253,6 +253,14 @@
     <ClInclude Include="Win32\ThreadImpl.hpp" />
     <ClInclude Include="Win32\ThreadLocalImpl.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\include\SFML\System\String.inl" />
+    <None Include="..\..\..\include\SFML\System\Thread.inl" />
+    <None Include="..\..\..\include\SFML\System\ThreadLocalPtr.inl" />
+    <None Include="..\..\..\include\SFML\System\Utf.inl" />
+    <None Include="..\..\..\include\SFML\System\Vector2.inl" />
+    <None Include="..\..\..\include\SFML\System\Vector3.inl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
