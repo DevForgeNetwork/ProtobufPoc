@@ -15,7 +15,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "common\Common.vcx
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SFML", "SFML", "{31329504-0EBC-4DC6-8599-D6C9392479C0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sfml-system", "dependencies\sfml\src\System\sfml-system.vcxproj", "{982ECB3E-97CA-3CEF-B5B3-A5D24584E05B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sfml-system", "dependencies\sfml\src\SFML\System\sfml-system.vcxproj", "{982ECB3E-97CA-3CEF-B5B3-A5D24584E05B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
