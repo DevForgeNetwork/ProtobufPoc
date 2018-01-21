@@ -13,6 +13,10 @@
 *.userosscache
 *.sln.docstates
 
+# Protobuf stuff
+*.pb.cc
+*.pb.h
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
