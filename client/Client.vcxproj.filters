@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Proto FIles">
-      <UniqueIdentifier>{a7a89fba-d732-4b58-b9c5-2270c6f248bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Proto FIles\Generated Files">
-      <UniqueIdentifier>{17413c87-b6f8-47f9-80b0-4f37db902520}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
