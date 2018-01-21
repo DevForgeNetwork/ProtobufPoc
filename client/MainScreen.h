@@ -7,8 +7,11 @@
 
 #include "Screen.h"
 
+#include <memory>
+
 namespace sf {
 	class RenderWindow;
+	class Font;
 }
 
 namespace Client {
@@ -26,6 +29,7 @@ public:
 
 private:
 	sf::RenderWindow* m_window;
+	std::unique_ptr<sf::Font> m_font;
 };
 
 //===============================================================================
