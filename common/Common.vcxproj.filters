@@ -13,5 +13,26 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Proto Files">
+      <UniqueIdentifier>{37bb015b-234c-41ee-80ff-365c1a110011}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Proto Files\Generated Files">
+      <UniqueIdentifier>{f1b0c5a6-da29-4ac0-9d88-406f99c08280}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ProtocolBuffer Include="proto\poc.proto">
+      <Filter>Proto Files</Filter>
+    </ProtocolBuffer>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="proto\poc.pb.cc">
+      <Filter>Proto Files\Generated Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="proto\poc.pb.h">
+      <Filter>Proto Files\Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

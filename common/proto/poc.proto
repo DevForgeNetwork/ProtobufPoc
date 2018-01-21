@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package poc;
+
+message SimpleMessage {
+	string text = 1;
+}
