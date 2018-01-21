@@ -138,12 +138,4 @@
       <Filter>Header Files\windows</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\include\SFML\System\String.inl" />
-    <None Include="..\..\..\include\SFML\System\Thread.inl" />
-    <None Include="..\..\..\include\SFML\System\ThreadLocalPtr.inl" />
-    <None Include="..\..\..\include\SFML\System\Utf.inl" />
-    <None Include="..\..\..\include\SFML\System\Vector2.inl" />
-    <None Include="..\..\..\include\SFML\System\Vector3.inl" />
-  </ItemGroup>
 </Project>
