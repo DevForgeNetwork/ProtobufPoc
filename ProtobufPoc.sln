@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sfml-system", "dependencies
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sfml-window", "dependencies\sfml\src\SFML\Window\sfml-window.vcxproj", "{00219901-69BF-35DB-B6D7-597D33DA2EBE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sfml-network", "dependencies\sfml\src\SFML\Network\sfml-network.vcxproj", "{85DD96A4-8812-35FE-8C72-B0A822301870}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -123,6 +125,18 @@ Global
 		{00219901-69BF-35DB-B6D7-597D33DA2EBE}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|Win32
 		{00219901-69BF-35DB-B6D7-597D33DA2EBE}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|Win32
 		{00219901-69BF-35DB-B6D7-597D33DA2EBE}.RelWithDebInfo|x86.Build.0 = RelWithDebInfo|Win32
+		{85DD96A4-8812-35FE-8C72-B0A822301870}.Debug|x64.ActiveCfg = Debug|Win32
+		{85DD96A4-8812-35FE-8C72-B0A822301870}.Debug|x86.ActiveCfg = Debug|Win32
+		{85DD96A4-8812-35FE-8C72-B0A822301870}.Debug|x86.Build.0 = Debug|Win32
+		{85DD96A4-8812-35FE-8C72-B0A822301870}.MinSizeRel|x64.ActiveCfg = MinSizeRel|Win32
+		{85DD96A4-8812-35FE-8C72-B0A822301870}.MinSizeRel|x86.ActiveCfg = MinSizeRel|Win32
+		{85DD96A4-8812-35FE-8C72-B0A822301870}.MinSizeRel|x86.Build.0 = MinSizeRel|Win32
+		{85DD96A4-8812-35FE-8C72-B0A822301870}.Release|x64.ActiveCfg = Release|Win32
+		{85DD96A4-8812-35FE-8C72-B0A822301870}.Release|x86.ActiveCfg = Release|Win32
+		{85DD96A4-8812-35FE-8C72-B0A822301870}.Release|x86.Build.0 = Release|Win32
+		{85DD96A4-8812-35FE-8C72-B0A822301870}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|Win32
+		{85DD96A4-8812-35FE-8C72-B0A822301870}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|Win32
+		{85DD96A4-8812-35FE-8C72-B0A822301870}.RelWithDebInfo|x86.Build.0 = RelWithDebInfo|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -132,6 +146,7 @@ Global
 		{31329504-0EBC-4DC6-8599-D6C9392479C0} = {2884B755-835B-49DA-9E3F-E34AD401A5B9}
 		{982ECB3E-97CA-3CEF-B5B3-A5D24584E05B} = {31329504-0EBC-4DC6-8599-D6C9392479C0}
 		{00219901-69BF-35DB-B6D7-597D33DA2EBE} = {31329504-0EBC-4DC6-8599-D6C9392479C0}
+		{85DD96A4-8812-35FE-8C72-B0A822301870} = {31329504-0EBC-4DC6-8599-D6C9392479C0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {24C0848B-7A5A-413D-9137-C6DF6EB4A1F0}
