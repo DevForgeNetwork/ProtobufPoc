@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -17,6 +17,87 @@
       <Configuration>RelWithDebInfo</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\System\sfml-system.vcxproj">
+      <Project>{982ecb3e-97ca-3cef-b5b3-a5d24584e05b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Window\sfml-window.vcxproj">
+      <Project>{00219901-69bf-35db-b6d7-597d33da2ebe}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BlendMode.cpp" />
+    <ClCompile Include="CircleShape.cpp" />
+    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="ConvexShape.cpp" />
+    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="GLCheck.cpp" />
+    <ClCompile Include="GLExtensions.cpp" />
+    <ClCompile Include="GLLoader.cpp" />
+    <ClCompile Include="Glsl.cpp" />
+    <ClCompile Include="Image.cpp" />
+    <ClCompile Include="ImageLoader.cpp" />
+    <ClCompile Include="RectangleShape.cpp" />
+    <ClCompile Include="RenderStates.cpp" />
+    <ClCompile Include="RenderTarget.cpp" />
+    <ClCompile Include="RenderTexture.cpp" />
+    <ClCompile Include="RenderTextureImpl.cpp" />
+    <ClCompile Include="RenderTextureImplDefault.cpp" />
+    <ClCompile Include="RenderTextureImplFBO.cpp" />
+    <ClCompile Include="RenderWindow.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Text.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureSaver.cpp" />
+    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Transformable.cpp" />
+    <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="VertexArray.cpp" />
+    <ClCompile Include="View.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\SFML\Graphics\BlendMode.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\CircleShape.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Color.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\ConvexShape.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Drawable.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Export.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Font.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Glsl.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Glyph.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Image.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\PrimitiveType.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Rect.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\RectangleShape.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\RenderStates.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\RenderTarget.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\RenderTexture.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\RenderWindow.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Shader.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Shape.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Sprite.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Text.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Texture.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Transform.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Transformable.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\Vertex.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\VertexArray.hpp" />
+    <ClInclude Include="..\..\..\include\SFML\Graphics\View.hpp" />
+    <ClInclude Include="GLCheck.hpp" />
+    <ClInclude Include="GLExtensions.hpp" />
+    <ClInclude Include="GLLoader.hpp" />
+    <ClInclude Include="ImageLoader.hpp" />
+    <ClInclude Include="RenderTextureImpl.hpp" />
+    <ClInclude Include="RenderTextureImplDefault.hpp" />
+    <ClInclude Include="RenderTextureImplFBO.hpp" />
+    <ClInclude Include="TextureSaver.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\include\SFML\Graphics\Glsl.inl" />
+    <None Include="..\..\..\include\SFML\Graphics\Rect.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{29A0B7BA-AC99-3CDD-9831-04CFC1E28C58}</ProjectGuid>
@@ -56,26 +137,26 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\sfml\build\lib\Debug\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">sfml-graphics.dir\Debug\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)build\$(Configuration)\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)build\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">sfml-graphics-s-d</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\sfml\build\lib\Release\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">sfml-graphics.dir\Release\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)build\$(Configuration)\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)build\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">sfml-graphics-s</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\sfml\build\lib\MinSizeRel\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">sfml-graphics.dir\MinSizeRel\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">$(SolutionDir)build\$(Configuration)\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">$(SolutionDir)build\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">sfml-graphics-s</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\sfml\build\lib\RelWithDebInfo\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">sfml-graphics.dir\RelWithDebInfo\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">$(SolutionDir)build\$(Configuration)\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">$(SolutionDir)build\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">sfml-graphics-s</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\sfml\include;C:\sfml\src;C:\sfml\extlibs\headers\stb_image;C:\sfml\extlibs\headers\jpeg;C:\sfml\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\extlibs\headers\stb_image;$(ProjectDir)..\..\..\extlibs\headers\jpeg;$(ProjectDir)..\..\..\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Debug/</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -87,16 +168,16 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>C:\sfml\build\lib\Debug\sfml-graphics-s.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(SolutionDir)build\$(Configuration)\lib\sfml-graphics-s.pdb</ProgramDataBaseFileName>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\sfml\include;C:\sfml\src;C:\sfml\extlibs\headers\stb_image;C:\sfml\extlibs\headers\jpeg;C:\sfml\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\extlibs\headers\stb_image;$(ProjectDir)..\..\..\extlibs\headers\jpeg;$(ProjectDir)..\..\..\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\sfml\include;C:\sfml\src;C:\sfml\extlibs\headers\stb_image;C:\sfml\extlibs\headers\jpeg;C:\sfml\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\extlibs\headers\stb_image;$(ProjectDir)..\..\..\extlibs\headers\jpeg;$(ProjectDir)..\..\..\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -109,7 +190,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\sfml\include;C:\sfml\src;C:\sfml\extlibs\headers\stb_image;C:\sfml\extlibs\headers\jpeg;C:\sfml\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\extlibs\headers\stb_image;$(ProjectDir)..\..\..\extlibs\headers\jpeg;$(ProjectDir)..\..\..\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Release/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -119,17 +200,18 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
-      <ProgramDataBaseFileName>C:\sfml\build\lib\Release\sfml-graphics-s.pdb</ProgramDataBaseFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ProgramDataBaseFileName>$(SolutionDir)build\$(Configuration)\lib\sfml-graphics-s.pdb</ProgramDataBaseFileName>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\sfml\include;C:\sfml\src;C:\sfml\extlibs\headers\stb_image;C:\sfml\extlibs\headers\jpeg;C:\sfml\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\extlibs\headers\stb_image;$(ProjectDir)..\..\..\extlibs\headers\jpeg;$(ProjectDir)..\..\..\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\sfml\include;C:\sfml\src;C:\sfml\extlibs\headers\stb_image;C:\sfml\extlibs\headers\jpeg;C:\sfml\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\extlibs\headers\stb_image;$(ProjectDir)..\..\..\extlibs\headers\jpeg;$(ProjectDir)..\..\..\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -142,7 +224,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\sfml\include;C:\sfml\src;C:\sfml\extlibs\headers\stb_image;C:\sfml\extlibs\headers\jpeg;C:\sfml\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\extlibs\headers\stb_image;$(ProjectDir)..\..\..\extlibs\headers\jpeg;$(ProjectDir)..\..\..\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -152,17 +234,18 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
-      <ProgramDataBaseFileName>C:\sfml\build\lib\MinSizeRel\sfml-graphics-s.pdb</ProgramDataBaseFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ProgramDataBaseFileName>$(SolutionDir)build\$(Configuration)\lib\sfml-graphics-s.pdb</ProgramDataBaseFileName>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\sfml\include;C:\sfml\src;C:\sfml\extlibs\headers\stb_image;C:\sfml\extlibs\headers\jpeg;C:\sfml\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\extlibs\headers\stb_image;$(ProjectDir)..\..\..\extlibs\headers\jpeg;$(ProjectDir)..\..\..\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\sfml\include;C:\sfml\src;C:\sfml\extlibs\headers\stb_image;C:\sfml\extlibs\headers\jpeg;C:\sfml\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\extlibs\headers\stb_image;$(ProjectDir)..\..\..\extlibs\headers\jpeg;$(ProjectDir)..\..\..\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -175,7 +258,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\sfml\include;C:\sfml\src;C:\sfml\extlibs\headers\stb_image;C:\sfml\extlibs\headers\jpeg;C:\sfml\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\extlibs\headers\stb_image;$(ProjectDir)..\..\..\extlibs\headers\jpeg;$(ProjectDir)..\..\..\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -186,16 +269,16 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>C:\sfml\build\lib\RelWithDebInfo\sfml-graphics-s.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(SolutionDir)build\$(Configuration)\lib\sfml-graphics-s.pdb</ProgramDataBaseFileName>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\sfml\include;C:\sfml\src;C:\sfml\extlibs\headers\stb_image;C:\sfml\extlibs\headers\jpeg;C:\sfml\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;STBI_FAILURE_USERMSG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\extlibs\headers\stb_image;$(ProjectDir)..\..\..\extlibs\headers\jpeg;$(ProjectDir)..\..\..\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\sfml\include;C:\sfml\src;C:\sfml\extlibs\headers\stb_image;C:\sfml\extlibs\headers\jpeg;C:\sfml\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\extlibs\headers\stb_image;$(ProjectDir)..\..\..\extlibs\headers\jpeg;$(ProjectDir)..\..\..\extlibs\headers\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -206,145 +289,6 @@
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <CustomBuild Include="C:\sfml\src\SFML\Graphics\CMakeLists.txt">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule C:/sfml/src/SFML/Graphics/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -HC:/sfml -BC:/sfml/build --check-stamp-file C:/sfml/build/src/SFML/Graphics/CMakeFiles/generate.stamp
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/sfml/src/SFML/Graphics/CMakeLists.txt;C:\sfml\src\SFML\Graphics\CMakeLists.txt;C:\Program Files\CMake\share\cmake-3.9\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindJPEG.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageMessage.cmake;C:\sfml\cmake\Modules\FindFreetype.cmake;C:\sfml\src\SFML\Graphics\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\sfml\build\src\SFML\Graphics\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule C:/sfml/src/SFML/Graphics/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -HC:/sfml -BC:/sfml/build --check-stamp-file C:/sfml/build/src/SFML/Graphics/CMakeFiles/generate.stamp
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/sfml/src/SFML/Graphics/CMakeLists.txt;C:\sfml\src\SFML\Graphics\CMakeLists.txt;C:\Program Files\CMake\share\cmake-3.9\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindJPEG.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageMessage.cmake;C:\sfml\cmake\Modules\FindFreetype.cmake;C:\sfml\src\SFML\Graphics\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\sfml\build\src\SFML\Graphics\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule C:/sfml/src/SFML/Graphics/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -HC:/sfml -BC:/sfml/build --check-stamp-file C:/sfml/build/src/SFML/Graphics/CMakeFiles/generate.stamp
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/sfml/src/SFML/Graphics/CMakeLists.txt;C:\sfml\src\SFML\Graphics\CMakeLists.txt;C:\Program Files\CMake\share\cmake-3.9\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindJPEG.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageMessage.cmake;C:\sfml\cmake\Modules\FindFreetype.cmake;C:\sfml\src\SFML\Graphics\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\sfml\build\src\SFML\Graphics\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule C:/sfml/src/SFML/Graphics/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -HC:/sfml -BC:/sfml/build --check-stamp-file C:/sfml/build/src/SFML/Graphics/CMakeFiles/generate.stamp
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/sfml/src/SFML/Graphics/CMakeLists.txt;C:\sfml\src\SFML\Graphics\CMakeLists.txt;C:\Program Files\CMake\share\cmake-3.9\Modules\FindOpenGL.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindJPEG.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.9\Modules\FindPackageMessage.cmake;C:\sfml\cmake\Modules\FindFreetype.cmake;C:\sfml\src\SFML\Graphics\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\sfml\build\src\SFML\Graphics\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\BlendMode.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\BlendMode.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\Color.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Color.hpp" />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Export.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\Font.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Font.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\Glsl.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Glsl.hpp" />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Glsl.inl" />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Glyph.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\GLCheck.cpp"  />
-    <ClInclude Include="C:\sfml\src\SFML\Graphics\GLCheck.hpp" />
-    <ClInclude Include="C:\sfml\src\SFML\Graphics\GLExtensions.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\GLExtensions.cpp"  />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\Image.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Image.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\ImageLoader.cpp"  />
-    <ClInclude Include="C:\sfml\src\SFML\Graphics\ImageLoader.hpp" />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\PrimitiveType.hpp" />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Rect.hpp" />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Rect.inl" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\RenderStates.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\RenderStates.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\RenderTexture.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\RenderTexture.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\RenderTarget.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\RenderTarget.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\RenderWindow.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\RenderWindow.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\Shader.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Shader.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\Texture.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Texture.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\TextureSaver.cpp"  />
-    <ClInclude Include="C:\sfml\src\SFML\Graphics\TextureSaver.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\Transform.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Transform.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\Transformable.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Transformable.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\View.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\View.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\Vertex.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Vertex.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\GLLoader.cpp"  />
-    <ClInclude Include="C:\sfml\src\SFML\Graphics\GLLoader.hpp" />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Drawable.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\Shape.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Shape.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\CircleShape.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\CircleShape.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\RectangleShape.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\RectangleShape.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\ConvexShape.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\ConvexShape.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\Sprite.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Sprite.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\Text.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\Text.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\VertexArray.cpp"  />
-    <ClInclude Include="C:\sfml\include\SFML\Graphics\VertexArray.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\RenderTextureImpl.cpp"  />
-    <ClInclude Include="C:\sfml\src\SFML\Graphics\RenderTextureImpl.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\RenderTextureImplFBO.cpp"  />
-    <ClInclude Include="C:\sfml\src\SFML\Graphics\RenderTextureImplFBO.hpp" />
-    <ClCompile Include="C:\sfml\src\SFML\Graphics\RenderTextureImplDefault.cpp"  />
-    <ClInclude Include="C:\sfml\src\SFML\Graphics\RenderTextureImplDefault.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="C:\sfml\build\ZERO_CHECK.vcxproj">
-      <Project>{C4EDE0D3-6B9D-301D-8BF9-2E6564065DFC}</Project>
-      <Name>ZERO_CHECK</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\sfml\build\src\SFML\System\sfml-system.vcxproj">
-      <Project>{982ECB3E-97CA-3CEF-B5B3-A5D24584E05B}</Project>
-      <Name>sfml-system</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\sfml\build\src\SFML\Window\sfml-window.vcxproj">
-      <Project>{00219901-69BF-35DB-B6D7-597D33DA2EBE}</Project>
-      <Name>sfml-window</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
