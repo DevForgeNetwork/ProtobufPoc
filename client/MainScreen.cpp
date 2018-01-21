@@ -8,7 +8,6 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Text.hpp>
-#include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Font.hpp>
 
 #include <assert.h>
@@ -44,11 +43,7 @@ void MainScreen::ProcessEvents()
 
 		if (e.type == sf::Event::KeyPressed)
 		{
-			if (e.key.code == sf::Keyboard::S)
-			{
-				// TODO: Send message to server.
-				LOG_DEBUG("Sending message to server.");
-			}
+			HandleKeyPress(e.key);
 		}
 	}
 }
@@ -59,14 +54,40 @@ void MainScreen::Draw()
 	assert(m_window);
 	m_window->clear(sf::Color::Black);
 
-	sf::Text text;
-	text.setOutlineColor(sf::Color::Red);
-	text.setFont(*m_font.get());
-	text.setString("Press 's' to send a message to Server.");
+	sf::Text connectText;
+	connectText.setOutlineColor(sf::Color::Red);
+	connectText.setFont(*m_font.get());
+	connectText.setString("Press 'c' to connect to Server.");
 
-	m_window->draw(text);
+	sf::Text sendMessageText;
+	sendMessageText.setOutlineColor(sf::Color::Red);
+	sendMessageText.setFont(*m_font.get());
+	sendMessageText.setString("Press 's' to send a message to Server.");
+
+	m_window->draw(m_isConnected ? sendMessageText : connectText);
 
 	m_window->display();
+}
+
+void MainScreen::HandleKeyPress(const sf::Event::KeyEvent& e) const
+{
+	switch (e.code)
+	{
+	case sf::Keyboard::C:
+	{
+		// TODO: Connect to server.
+		LOG_DEBUG("Connecting to Server.");
+	}
+		break;
+	case sf::Keyboard::S:
+	{
+		// TODO: Send message to server.
+		LOG_DEBUG("Sending message to server.");
+	}
+		break;
+	default:
+		break;
+	}
 }
 
 //===============================================================================

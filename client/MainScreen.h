@@ -7,6 +7,7 @@
 
 #include "Screen.h"
 
+#include <SFML/Window/Event.hpp>
 #include <memory>
 
 namespace sf {
@@ -28,8 +29,14 @@ public:
 	virtual void Draw() override;
 
 private:
+	void HandleKeyPress(const sf::Event::KeyEvent& e) const;
+
+private:
 	sf::RenderWindow* m_window;
 	std::unique_ptr<sf::Font> m_font;
+
+	// Are we connected to the server?
+	bool m_isConnected = false;
 };
 
 //===============================================================================
