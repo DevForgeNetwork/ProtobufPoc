@@ -4,7 +4,10 @@
 //
 
 #include "Log.h"
+
 #include <algorithm>
+#include <iostream>
+#include <sstream>
 
 #define NOMINMAX
 #include <windows.h>
