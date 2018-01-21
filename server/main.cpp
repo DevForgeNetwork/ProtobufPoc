@@ -11,6 +11,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Network.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 class Connection
 {
@@ -78,7 +79,7 @@ int main()
 {
 	Connection c;
 	sf::Window window(sf::VideoMode(800, 600), "My window");
-
+	sf::SoundBuffer buffer;
 	sf::Font font;
 	sf::Text text("Hello SFML", font, 50);
 
