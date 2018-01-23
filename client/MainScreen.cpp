@@ -32,6 +32,11 @@ namespace
 	// Network stuff.
 	const int s_port = 50001;
 	const sf::IpAddress s_serverAddress = "127.0.0.1";
+
+	// Max data per read 64kb.
+	const uint32_t s_maxDataChunk = 64000;
+
+	const uint32_t s_headerSize = 8;
 }
 
 // Game data
@@ -77,13 +82,205 @@ public:
 
 struct MessageHeader
 {
-	MessageType messageType;
-	uint32_t headerLength;
+	void Clear()
+	{
+		messageType = MessageType::Creature;
+		messageLength = 0;
+	}
+	MessageType messageType = MessageType::Creature;
+	int messageLength = 0;
 };
 
-using ByteBuffer = std::unique_ptr<uint8_t[]>;
+using ByteBufferPtr = std::unique_ptr<uint8_t[]>;
+class Buffer
+{
+public:
+	uint8_t* GetData() { return m_data.get(); }
+	uint32_t GetSize() { return m_size; }
+
+	void InitializeData()
+	{
+		for (int i = 0; i < s_maxDataChunk; ++i)
+		{
+			m_data[i] = 0;
+		}
+	}
+
+	void SetData(const uint8_t data[], uint32_t size)
+	{
+		if (m_size + size < s_maxDataChunk)
+		{
+			std::memcpy(m_data.get() + m_size, data, size);
+			m_size += size;
+			if (m_size > m_maxSinceClear)
+			{
+				m_maxSinceClear = m_size;
+			}
+		}
+	}
+
+	void ClearData()
+	{
+		for (uint32_t i = 0; i < m_maxSinceClear; ++i)
+		{
+			m_data[i] = 0;
+		}
+		m_size = 0;
+		m_maxSinceClear = 0;
+	}
+private:
+	ByteBufferPtr m_data = std::make_unique<uint8_t[]>(s_maxDataChunk);
+	uint32_t m_size = 0;
+
+	// Holds the biggest we've been since we've last been cleared. This is just an optimization.
+	// This way we don't need to clear the entire buffer, just up to our highest index.
+	uint32_t m_maxSinceClear;
+};
+struct Message
+{
+	std::unique_ptr<Buffer> messageData = std::make_unique<Buffer>();
+	MessageHeader header;
+};
 class ClientNetworkController
 {
+	class MessageHelper
+	{
+	public:
+
+		MessageHelper()
+		{
+			m_activeBuffer = &m_firstBuffer;
+		}
+
+		// TODO: perhaps pass a reference to a Message in. That way I can
+		// Clear stale data after we successfully parse a message, instead of
+		// at the beginning of this function.
+		void ParseMessage(const uint8_t rawData[], uint32_t size, Message& msg)
+		{
+			// Call site algorithm
+			// Receive data
+				// datap1 = data
+				// While datap1.size() > 0
+					// ParseData
+					// Handle Message
+					// reset datap1
+					// memcpy(datap1, data + message.size, size - message.size)
+
+			BuildHeader(rawData, size, msg);
+
+			// Attempt to set the message from our data.
+			BuildMessage(rawData, size, msg);
+		}
+
+	private:
+		void BuildHeader(const uint8_t rawData[], uint32_t& size, Message& msg)
+		{
+			if (m_header.messageLength == 0)
+			{
+				int overflow = m_bytesReceivedThisMessage + size - s_headerSize;
+				m_bytesReceivedThisMessage += size;
+				if (overflow >= 0)
+				{
+					// Accumulate header data.
+					int headerRemainder = size - overflow;
+					m_activeBuffer->SetData(rawData, headerRemainder);
+
+					memcpy(&m_header, m_activeBuffer->GetData(), s_headerSize);
+					// Put overflow data in next buffer.
+					SwapBuffer();
+					m_activeBuffer->SetData(rawData + headerRemainder, overflow);
+
+					// We have already handled the header in our old buffer. We shouldn't consider it
+					// while parsing the message.
+					size -= s_headerSize;
+				}
+				else
+				{
+					m_activeBuffer->SetData(rawData, size);
+				}
+			}
+		}
+
+		void BuildMessage(const uint8_t rawData[], uint32_t size, Message& msg)
+		{
+			if (m_header.messageLength != 0)
+			{
+				// Calculate number of overflow bytes
+				// If we had 3 bytes already, needed 5, but received 12, 10 bytes would be overflowing.
+				int overflow = m_activeBuffer->GetSize() - size;
+
+				if (overflow >=0)
+				{
+					// Copy remainder of the message to our active buffer.
+					int messageRemainder = size - overflow;
+					m_activeBuffer->SetData(rawData, messageRemainder);
+
+					// Copy full message into our message struct.
+					msg.messageData->SetData(m_activeBuffer->GetData(), m_header.messageLength);
+					msg.header = m_header;
+
+					// Put the overflow into next buffer.
+					SwapBuffer();
+					m_activeBuffer->SetData(rawData + messageRemainder, overflow);
+
+					m_header.Clear();
+					m_bytesReceivedThisMessage = 0;
+				}
+				else
+				{
+					m_activeBuffer->SetData(rawData, size);
+				}
+			}
+		}
+
+		void SwapBuffer()
+		{
+			if (m_activeBuffer == &m_firstBuffer)
+			{
+				m_activeBuffer = &m_secondBuffer;
+				m_firstBuffer.ClearData();
+			}
+			else
+			{
+				m_activeBuffer = &m_firstBuffer;
+				m_secondBuffer.ClearData();
+			}
+		}
+
+		// Whichever buffer is currently in use will be cleared.
+		void ClearInactiveBuffer()
+		{
+			if (m_activeBuffer == &m_firstBuffer)
+			{
+				m_secondBuffer.ClearData();
+			}
+			else
+			{
+				m_firstBuffer.ClearData();
+			}
+		}
+
+		void ClearActiveBuffer()
+		{
+			if (m_activeBuffer == &m_firstBuffer)
+			{
+				m_firstBuffer.ClearData();
+			}
+			else
+			{
+				m_firstBuffer.ClearData();
+			}
+		}
+
+		MessageHeader m_header;
+		// Data received will alternate between each buffer.
+		Buffer m_firstBuffer;
+		Buffer m_secondBuffer;
+		Buffer* m_activeBuffer;
+
+		// Total number of bytes received on this message across parse attempts.
+		uint32_t m_bytesReceivedThisMessage = 0;
+	};
 
 public:
 	ClientNetworkController()
@@ -115,7 +312,6 @@ public:
 
 	void ReceiveMessages()
 	{
-
 	}
 
 	void QueueCreatureMessage(Creature* creature)
@@ -176,9 +372,11 @@ public:
 		return true;
 	}
 
+	// TODO: Move this.
+	MessageHelper m_helper;
 private:
 	sf::TcpSocket m_socket;
-	std::deque<ByteBuffer> m_messageQueue;
+	std::deque<ByteBufferPtr> m_messageQueue;
 };
 
 //--------------------------------------------------------------------------------
@@ -193,6 +391,62 @@ MainScreen::MainScreen(sf::RenderWindow* window)
 	{
 		LOG_DEBUG("Error: Could not find font. path=" + s_fontPath);
 	}
+}
+
+void MainScreen::RunParserTest()
+{
+	//----------------------------------------------------
+	// Data Setup
+	//----------------------------------------------------
+	MessageHeader header;
+	header.messageLength = 14;
+	char messageData[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n' };
+	auto ClearBuffer = [](uint8_t buffer[], int& size)
+	{
+		for (int i = 0; i < size; ++i)
+		{
+			buffer[i] = 0;
+		}
+		size = 0;
+	};
+
+	int size = 50;
+	std::unique_ptr<uint8_t[]> netBuffer = std::make_unique<uint8_t[]>(50);
+	ClearBuffer(netBuffer.get(), size);
+
+	//----------------------------------------------------
+
+	// Test 1)
+	// Receive single message in one chunk
+	Message msg;
+	assert(sizeof(header) == 8);
+	std::memcpy(netBuffer.get(), &header, 8);
+	std::memcpy(netBuffer.get() + 8, messageData, 14);
+	m_networkController->m_helper.ParseMessage(netBuffer.get(), sizeof(header) + header.messageLength, msg);
+	
+	assert(msg.header.messageLength == 14);
+	assert(msg.header.messageType == MessageType::Creature);
+	assert(msg.messageData->GetSize() == 14);
+	for (int i = 0; i < 14; ++i)
+	{
+		assert(msg.messageData->GetData()[i] == messageData[i]);
+	}
+
+	// Test 2)
+	// Receive the header
+	// Receive remainder of message in 3 chunks
+
+	// Test 3)
+	// Receive the header
+	// Receive remainder of message in 3 chunks
+	// Last chunk has part of next message
+	// Receive rest of message in next chunk
+
+
+	// Test 4)
+	// Receive the header
+	// Receive remainder of message in 3 chunks
+	// Last chunk has last chunk + entire next message
 }
 
 void MainScreen::ProcessEvents()
@@ -244,8 +498,10 @@ void MainScreen::HandleKeyPress(const sf::Event::KeyEvent& e)
 		break;
 	case sf::Keyboard::S:
 		SendTestMessageToServer();
-		LOG_DEBUG("Sending message to server.");
 		break;
+	case sf::Keyboard::T:
+		RunParserTest();
+
 	default:
 		break;
 	}
