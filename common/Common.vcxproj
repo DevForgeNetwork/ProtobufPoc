@@ -58,6 +58,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\tools\properties\sfml.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -90,7 +91,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..;$(ProjectDir)..\dependencies;$(ProjectDir)..\..;$(ProjectDir)..\dependencies\protobuf\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..;$(ProjectDir)..\dependencies;$(ProjectDir)..\..;$(ProjectDir)..\dependencies\protobuf\src;$(ProjectDir)..\dependencies\sfml\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -131,13 +132,22 @@
     <ProtocolBuffer Include="proto\poc.proto" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ByteBuffer.cpp" />
     <ClCompile Include="Log.cpp" />
+    <ClCompile Include="MessageParser.cpp" />
+    <ClCompile Include="MessageParserTest.cpp" />
     <ClCompile Include="NetworkController.cpp" />
+    <ClCompile Include="ProtobufTestDummy.cpp" />
     <ClCompile Include="proto\poc.pb.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ByteBuffer.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="MessageParser.h" />
+    <ClInclude Include="MessageParserTest.h" />
     <ClInclude Include="NetworkController.h" />
+    <ClInclude Include="NetworkTypes.h" />
+    <ClInclude Include="ProtobufTestDummy.h" />
     <ClInclude Include="proto\poc.pb.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

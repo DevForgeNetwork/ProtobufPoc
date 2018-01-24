@@ -19,6 +19,18 @@
     <Filter Include="Proto Files\Generated Files">
       <UniqueIdentifier>{f1b0c5a6-da29-4ac0-9d88-406f99c08280}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Network">
+      <UniqueIdentifier>{695f6103-08e0-4896-83c7-521c8af51220}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Network">
+      <UniqueIdentifier>{35156d33-d888-4ec7-9dff-a1abb1e3ade6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Test">
+      <UniqueIdentifier>{a1d39f7e-3151-48c6-91d7-fda1e98c6e15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Test">
+      <UniqueIdentifier>{7af4a3f9-a9d5-45b0-a36f-701315309184}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ProtocolBuffer Include="proto\poc.proto">
@@ -33,7 +45,19 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NetworkController.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageParser.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="ByteBuffer.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageParserTest.cpp">
+      <Filter>Source Files\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtobufTestDummy.cpp">
+      <Filter>Source Files\Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -43,8 +67,23 @@
     <ClInclude Include="Log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkTypes.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
     <ClInclude Include="NetworkController.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageParser.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="ByteBuffer.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageParserTest.h">
+      <Filter>Header Files\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtobufTestDummy.h">
+      <Filter>Header Files\Test</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package poc;
 
-message Creature {
+message ProtobufTestDummy {
 	string name = 1;
 	int32 health = 2;
 	int32 mana = 3;

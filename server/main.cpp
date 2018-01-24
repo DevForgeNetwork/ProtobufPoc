@@ -43,6 +43,7 @@ public:
 	{
 		LOG_DEBUG_CONSOLE("Attempting to listen to port ");
 
+		m_listener.setBlocking(false);
 		// Returns Done if opening the port was successful.
 		if (m_listener.listen(s_port) != sf::Socket::Done)
 		{
@@ -61,14 +62,14 @@ public:
 private:
 	void CheckConnectionRequests()
 	{
-		std::unique_ptr<Connection> connection = std::make_unique<Connection>();
-		sf::Socket::Status status = m_listener.accept(connection->GetSocket());
-		LOG_DEBUG_CONSOLE("status" + std::to_string(status));
+		sf::Socket::Status status = m_listener.accept(m_connection.GetSocket());
+		LOG_DEBUG_CONSOLE("status" + std::to_string(static_cast<int>(status)));
 	}
 
 private:
 	sf::TcpListener m_listener;
 	std::vector<std::unique_ptr<Connection>> m_connections;
+	Connection m_connection;
 };
 
 //-----------------------------------------------------------------------------------
