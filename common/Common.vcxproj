@@ -132,10 +132,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Log.cpp" />
+    <ClCompile Include="NetworkController.cpp" />
     <ClCompile Include="proto\poc.pb.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Log.h" />
+    <ClInclude Include="NetworkController.h" />
     <ClInclude Include="proto\poc.pb.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
