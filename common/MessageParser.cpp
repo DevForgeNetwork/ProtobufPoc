@@ -41,7 +41,14 @@ bool MessageParser::ParseMessage(const uint8_t rawData[], uint32_t size, std::ve
 			// If we have a full header.
 			if (m_activeBuffer->GetSize() == s_headerSize)
 			{
-				memcpy(&m_header, m_activeBuffer->GetData(), s_headerSize);
+				uint32_t messageType = 0;
+				uint32_t messageLength = 0;
+
+				memcpy(&messageType, m_activeBuffer->GetData(), sizeof(messageType));
+				memcpy(&messageLength, m_activeBuffer->GetData() + sizeof(messageType), sizeof(messageLength));
+				m_header.messageType = static_cast<MessageType>(messageType);
+				m_header.messageLength = messageLength;
+
 				m_isHeaderSet = true;
 
 				// If this set of raw data contains header data, note the offset for our message.
