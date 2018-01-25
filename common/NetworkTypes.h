@@ -30,7 +30,7 @@ struct MessageHeader
 	};
 
 	MessageType messageType = MessageType::None;
-	int messageLength = 0;
+	uint32_t messageLength = 0;
 };
 
 struct NetworkMessage

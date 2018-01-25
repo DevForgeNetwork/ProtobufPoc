@@ -33,7 +33,7 @@ public:
 
 	// Queues a message to be sent the next time SendMessages is called. The type is needed so it can be
 	// packaged with the message.
-	void QueueMessage(MessageType type, uint8_t message[], int messageLength);
+	void QueueMessage(MessageType type, uint8_t message[], uint32_t messageLength);
 
 	// Connect to the server at the specified address.
 	void ConnectToServer(const std::string& address);

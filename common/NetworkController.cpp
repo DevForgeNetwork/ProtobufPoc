@@ -68,7 +68,7 @@ void NetworkController::ReceiveMessages()
 
 }
 
-void NetworkController::QueueMessage(MessageType type, uint8_t message[], int messageLength)
+void NetworkController::QueueMessage(MessageType type, uint8_t message[], uint32_t messageLength)
 {
 	LOG_DEBUG("Queuing Message to send to Server");
 	// Add the data to our message header.
