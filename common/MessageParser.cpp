@@ -15,6 +15,7 @@ namespace
 }
 
 MessageParser::MessageParser()
+	: m_activeBuffer(&m_firstBuffer)
 {
 }
 
