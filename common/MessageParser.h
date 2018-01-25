@@ -2,11 +2,12 @@
 //
 // MessageParser.cpp
 //
-#include <memory>
 
 #pragma once
 
 #include "NetworkTypes.h"
+#include <memory>
+#include <vector>
 
 namespace Common {
 
@@ -17,20 +18,13 @@ class MessageParser
 public:
 	MessageParser();
 	~MessageParser();
-	void ParseMessage(const uint8_t rawData[], uint32_t size, NetworkMessage& message);
+
+	// Returns true if any messages are parsed successfully.
+	bool ParseMessage(const uint8_t rawData[], uint32_t size, std::vector<NetworkMessage>& messages);
 
 private:
-	// Reads in data for the message header.
-	void BuildHeader(const uint8_t rawData[], uint32_t& size);
-
-	// Reads in data for the content of the message.
-	void BuildMessage(const uint8_t rawData[], uint32_t size, NetworkMessage& msg);
-
 	// Swaps the currently active buffer.
 	void SwapBuffer();
-
-	// Clears the opposite buffer to the active one.
-	void ClearInactiveBuffer();
 
 private:
 	// Holds data about the content we're trying to receive. Header data will be copied three times.
@@ -44,8 +38,11 @@ private:
 	// Points to the buffer currently being filled with data.
 	ByteBuffer* m_activeBuffer;
 
+	// We should be looking for header data if this is false.
+	bool m_isHeaderSet = false;
+
 	// Total number of bytes received on this message across parse attempts.
-	uint32_t m_bytesReceivedThisMessage = 0;
+	uint32_t m_totalBytesParsed = 0;
 };
 
 //===============================================================================

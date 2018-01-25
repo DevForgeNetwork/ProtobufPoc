@@ -24,7 +24,12 @@ public:
 	void RunTests();
 
 private:
+	void ClearBuffer(uint8_t buffer[]) const;
 	void Verify(const NetworkMessage& message) const;
+	void TestSingle() const;
+	void TestMulti() const;
+	void TestPartial() const;
+	void TestUneven() const;
 
 private:
 	std::unique_ptr<MessageParser> m_parser;

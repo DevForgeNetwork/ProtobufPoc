@@ -4,6 +4,7 @@
 //
 
 #include "MessageParser.h"
+#include <algorithm>
 
 namespace Common {
 
@@ -24,71 +25,59 @@ MessageParser::~MessageParser()
 
 }
 
-void MessageParser::ParseMessage(const uint8_t rawData[], uint32_t size, NetworkMessage& message)
+bool MessageParser::ParseMessage(const uint8_t rawData[], uint32_t size, std::vector<NetworkMessage>& messages)
 {
-	BuildHeader(rawData, size);
-
-	// Attempt to set the message from our data.
-	BuildMessage(rawData, size, message);
-}
-
-void MessageParser::BuildHeader(const uint8_t rawData[], uint32_t& size)
-{
-	if (m_header.messageLength == 0)
+	int headerOffset = 0;
+	while (m_totalBytesParsed < size)
 	{
-		int overflow = m_bytesReceivedThisMessage + size - s_headerSize;
-		m_bytesReceivedThisMessage += size;
-		if (overflow >= 0)
+		if (!m_isHeaderSet)
 		{
-			// Accumulate header data.
-			int headerRemainder = size - overflow;
-			m_activeBuffer->SetData(rawData, headerRemainder);
+			int startSize = m_activeBuffer->GetSize();
 
-			memcpy(&m_header, m_activeBuffer->GetData(), s_headerSize);
-			// Put overflow data in next buffer.
-			SwapBuffer();
-			m_activeBuffer->SetData(rawData + headerRemainder, overflow);
+			// Copy up to the full header data into the current buffer.
+			m_activeBuffer->SetData(rawData, std::min(size, s_headerSize - startSize));
+			m_totalBytesParsed += m_activeBuffer->GetSize();
 
-			// We have already handled the header in our old buffer. We shouldn't consider it
-			// while parsing the message.
-			size -= s_headerSize;
+			// If we have a full header.
+			if (m_activeBuffer->GetSize() == s_headerSize)
+			{
+				memcpy(&m_header, m_activeBuffer->GetData(), s_headerSize);
+				m_isHeaderSet = true;
+
+				// If this set of raw data contains header data, note the offset for our message.
+				headerOffset = s_headerSize - startSize;
+
+				// Message data goes into the next buffer.
+				SwapBuffer();
+			}
 		}
-		else
+		if (m_isHeaderSet && m_totalBytesParsed < size)
 		{
-			m_activeBuffer->SetData(rawData, size);
+			int sizeToCopy = std::min(size, m_header.messageLength - m_activeBuffer->GetSize());
+
+			// Copy up to full message data into current buffer.
+			m_activeBuffer->SetData(rawData + headerOffset, sizeToCopy);
+			m_totalBytesParsed += sizeToCopy;
+
+			// If we have a full message.
+			if (m_activeBuffer->GetSize() == m_header.messageLength)
+			{
+				// Package data into NetworkMessage and copy to out-data.
+				NetworkMessage msg;
+				msg.header = m_header;
+				msg.messageData.SetData(m_activeBuffer->GetData(), m_header.messageLength);
+				messages.push_back(std::move(msg));
+
+				// Reset state.
+				m_isHeaderSet = false;
+				m_header.Clear();
+				SwapBuffer();
+			}
 		}
 	}
-}
 
-void MessageParser::BuildMessage(const uint8_t rawData[], uint32_t size, NetworkMessage& message)
-{
-	if (m_header.messageLength != 0)
-	{
-		// Calculate number of overflow bytes
-		// If we had 3 bytes already, needed 5, but received 12, 10 bytes would be overflowing.
-		int overflow = m_activeBuffer->GetSize() - size;
-
-		if (overflow >= 0)
-		{
-			// Copy remainder of the message to our active buffer.
-			int messageRemainder = size - overflow;
-
-			// Copy full message into our message struct.
-			message.messageData.SetData(m_activeBuffer->GetData(), m_header.messageLength);
-			message.header = m_header;
-
-			// Put the overflow into next buffer.
-			SwapBuffer();
-			m_activeBuffer->SetData(rawData + messageRemainder, overflow);
-
-			m_header.Clear();
-			m_bytesReceivedThisMessage = 0;
-		}
-		else
-		{
-			m_activeBuffer->SetData(rawData, size);
-		}
-	}
+	m_totalBytesParsed = 0;
+	return !messages.empty();
 }
 
 void MessageParser::SwapBuffer()
@@ -102,18 +91,6 @@ void MessageParser::SwapBuffer()
 	{
 		m_activeBuffer = &m_firstBuffer;
 		m_secondBuffer.ClearData();
-	}
-}
-
-void MessageParser::ClearInactiveBuffer()
-{
-	if (m_activeBuffer == &m_firstBuffer)
-	{
-		m_secondBuffer.ClearData();
-	}
-	else
-	{
-		m_firstBuffer.ClearData();
 	}
 }
 

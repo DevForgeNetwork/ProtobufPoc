@@ -15,6 +15,13 @@ class ByteBuffer
 {
 public:
 	ByteBuffer(int sizeOverride = -1);
+	ByteBuffer(ByteBuffer&& b) noexcept
+		: m_data(std::move(b.m_data))
+		, m_size(std::move(b.m_size))
+		, m_maxSinceClear(std::move(b.m_maxSinceClear))
+	{
+
+	}
 	~ByteBuffer();
 
 	// Returns raw byte data.
