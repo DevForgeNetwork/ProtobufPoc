@@ -178,13 +178,8 @@ void MessageParserTest::MessageHelper::SendPartialMessage(uint8_t data[], int si
 void MessageParserTest::MessageHelper::SendPartialHeader(uint8_t data[], int sizeToSend,
 	std::vector<NetworkMessage>& messages, bool& hasMessages)
 {
-	uint32_t messageType = static_cast<uint32_t>(s_header.messageType);
-	uint32_t messageLength = s_header.messageLength;
-
 	std::unique_ptr<uint8_t[]> temp = std::make_unique<uint8_t[]>(sizeof(s_header));
-	std::memcpy(temp.get(), &messageType, sizeof(messageType));
-	std::memcpy(temp.get() + sizeof(messageType), &messageLength, sizeof(messageLength));
-
+	std::memcpy(temp.get(), &s_header, sizeof(s_header));
 	std::memcpy(data, temp.get() + m_sizeSent, sizeToSend);
 	m_sizeSent += sizeToSend;
 	SendPartialData(data, sizeToSend, messages, hasMessages);
