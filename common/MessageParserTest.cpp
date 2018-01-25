@@ -27,6 +27,7 @@ namespace
 
 MessageParserTest::MessageParserTest()
 	: m_parser(std::make_unique<Common::MessageParser>())
+	, m_helper(this)
 {
 }
 
@@ -43,7 +44,7 @@ void MessageParserTest::RunTests()
 	TestMulti();
 }
 
-void MessageParserTest::ClearBuffer(uint8_t buffer[]) const
+void MessageParserTest::ClearBuffer(uint8_t buffer[])
 {
 	for (int i = 0; i < s_bufferSize; ++i)
 	{
@@ -51,7 +52,7 @@ void MessageParserTest::ClearBuffer(uint8_t buffer[]) const
 	}
 }
 
-void MessageParserTest::Verify(const NetworkMessage& message) const
+void MessageParserTest::Verify(const NetworkMessage& message)
 {
 	assert(message.header.messageLength == 14);
 	assert(message.header.messageType == MessageType::Attack);
@@ -62,7 +63,7 @@ void MessageParserTest::Verify(const NetworkMessage& message) const
 	}
 }
 
-void MessageParserTest::TestSingle() const
+void MessageParserTest::TestSingle()
 {
 	// Test 1)
 	// Send full message in a single chunk.
@@ -75,21 +76,21 @@ void MessageParserTest::TestSingle() const
 	std::memcpy(netBuffer.get() + 8, s_messageData, 14);
 	bool messageFilled = false;
 
-	std::vector<NetworkMessage> msg;
-	messageFilled = m_parser->ParseMessage(netBuffer.get(), sizeof(s_header) + s_header.messageLength, msg);
+	std::vector<NetworkMessage> messages;
+	messageFilled = m_parser->ParseMessage(netBuffer.get(), sizeof(s_header) + s_header.messageLength, messages);
 	assert(messageFilled);
-	Verify(msg[0]);
+	Verify(messages[0]);
 
 	LOG_DEBUG("PASS: Single message parse test succeeded.");
 }
 
-void MessageParserTest::TestMulti() const
+void MessageParserTest::TestMulti()
 {
 	// Test 4)
 	// Send 4 messages in one chunk.
 }
 
-void MessageParserTest::TestPartial() const
+void MessageParserTest::TestPartial()
 {
 	// Test 2)
 	// Send the header
@@ -97,47 +98,34 @@ void MessageParserTest::TestPartial() const
 	// - 3 bytes, 6 bytes, 5 bytes.
 	std::unique_ptr<uint8_t[]> netBuffer = std::make_unique<uint8_t[]>(s_bufferSize);
 
-	std::vector<NetworkMessage> msg;
-	bool messageFilled = false;
+	std::vector<NetworkMessage> messages;
+	bool hasMessages = false;
 
 	// Send header.
-	std::memcpy(netBuffer.get(), &s_header, 8);
-	messageFilled = m_parser->ParseMessage(netBuffer.get(), sizeof(s_header), msg);
-	assert(!messageFilled);
-
-	int sizeSent = 0;
-	int sizeToSend = 3;
+	m_helper.SendPartialHeader(netBuffer.get(), 8, messages, hasMessages);
+	assert(!hasMessages);
+	m_helper.Clear();
 
 	// Send a chunk.
-	std::memcpy(netBuffer.get(), s_messageData + sizeSent, sizeToSend);
-	sizeSent += sizeToSend;
-	messageFilled = m_parser->ParseMessage(netBuffer.get(), sizeToSend, msg);
-	assert(!messageFilled);
-	ClearBuffer(netBuffer.get());
+	m_helper.SendPartialMessage(netBuffer.get(), 3, messages, hasMessages);
+	assert(!hasMessages);
 
-	sizeToSend = 6;
-	std::memcpy(netBuffer.get(), s_messageData + sizeSent, sizeToSend);
-	sizeSent += sizeToSend;
-	messageFilled = m_parser->ParseMessage(netBuffer.get(), sizeToSend, msg);
-	assert(!messageFilled);
-	ClearBuffer(netBuffer.get());
+	m_helper.SendPartialMessage(netBuffer.get(), 6, messages, hasMessages);
+	assert(!hasMessages);
+	
+	m_helper.SendPartialMessage(netBuffer.get(), 5, messages, hasMessages);
+	assert(hasMessages);
 
-	sizeToSend = 5;
-	std::memcpy(netBuffer.get(), s_messageData + sizeSent, sizeToSend);
-	sizeSent += sizeToSend;
-	messageFilled = m_parser->ParseMessage(netBuffer.get(), sizeToSend, msg);
-	assert(messageFilled);
-	ClearBuffer(netBuffer.get());
-	Verify(msg[0]);
-
+	Verify(messages[0]);
 	LOG_DEBUG("PASS: Partial data message parse test succeeded.");
+	messages.pop_back();
 
 	// Test 6)
 	// Send header in 4 chunks: 2 bytes, 2 bytes, 3 bytes, 1 byte.
 	// Send message in 2, 7 byte chunks.
 }
 
-void MessageParserTest::TestUneven() const
+void MessageParserTest::TestUneven()
 {
 	// Test 3)
 	// Send the header.
@@ -149,6 +137,40 @@ void MessageParserTest::TestUneven() const
 	// Send the header.
 	// Send remainder of message in 3 chunks.
 	// Last chunk has last chunk + entire next message.
+}
+
+//--------------------------------------------------------------------------------
+MessageParserTest::MessageHelper::MessageHelper(MessageParserTest* tester)
+	: m_tester(tester)
+{
+}
+
+void MessageParserTest::MessageHelper::SendPartialMessage(uint8_t data[], int sizeToSend,
+	std::vector<NetworkMessage>& messages, bool& hasMessages)
+{
+	std::memcpy(data, s_messageData + m_sizeSent, sizeToSend);
+	m_sizeSent += sizeToSend;
+	SendPartialData(data, sizeToSend, messages, hasMessages);
+}
+
+void MessageParserTest::MessageHelper::SendPartialHeader(uint8_t data[], int sizeToSend,
+	std::vector<NetworkMessage>& messages, bool& hasMessages)
+{
+	std::memcpy(data, &s_header, sizeToSend);
+	m_sizeSent += sizeToSend;
+	SendPartialData(data, sizeToSend, messages, hasMessages);
+}
+
+void MessageParserTest::MessageHelper::Clear()
+{
+	m_sizeSent = 0;
+}
+
+void MessageParserTest::MessageHelper::SendPartialData(uint8_t data[], int sizeToSend,
+	std::vector<NetworkMessage>& messages, bool& hasMessages)
+{
+	hasMessages = m_tester->m_parser->ParseMessage(data, sizeToSend, messages);
+	m_tester->ClearBuffer(data);
 }
 
 //===============================================================================
