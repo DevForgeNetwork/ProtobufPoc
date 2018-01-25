@@ -5,8 +5,11 @@
 
 #include "MessageParserTest.h"
 
+#include "ByteBuffer.h"
+#include "Log.h"
 #include "MessageParser.h"
 #include "NetworkTypes.h"
+
 
 #include <assert.h>
 
@@ -15,7 +18,14 @@ namespace Test {
 
 //===============================================================================
 
+namespace
+{
+	const char s_messageData[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n' };
+	const int s_bufferSize = 50;
+}
+
 MessageParserTest::MessageParserTest()
+	: m_parser(std::make_unique<Common::MessageParser>())
 {
 }
 
@@ -23,14 +33,15 @@ MessageParserTest::~MessageParserTest()
 {
 }
 
-void MessageParserTest::RunTest()
+void MessageParserTest::RunTests()
 {
 	//----------------------------------------------------
 	// Data Setup
 	//----------------------------------------------------
 	MessageHeader header;
+	header.messageType = MessageType::Attack;
 	header.messageLength = 14;
-	char messageData[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n' };
+	
 	auto ClearBuffer = [](uint8_t buffer[], int& size)
 	{
 		for (int i = 0; i < size; ++i)
@@ -40,7 +51,7 @@ void MessageParserTest::RunTest()
 		size = 0;
 	};
 
-	int size = 50;
+	int size = s_bufferSize;
 	std::unique_ptr<uint8_t[]> netBuffer = std::make_unique<uint8_t[]>(50);
 	ClearBuffer(netBuffer.get(), size);
 
@@ -51,16 +62,10 @@ void MessageParserTest::RunTest()
 	NetworkMessage msg;
 	assert(sizeof(header) == 8);
 	std::memcpy(netBuffer.get(), &header, 8);
-	std::memcpy(netBuffer.get() + 8, messageData, 14);
+	std::memcpy(netBuffer.get() + 8, s_messageData, 14);
 	m_parser->ParseMessage(netBuffer.get(), sizeof(header) + header.messageLength, msg);
+	Verify(msg);
 
-	assert(msg.header.messageLength == 14);
-	assert(msg.header.messageType == MessageType::Creature);
-	assert(msg.messageData->GetSize() == 14);
-	for (int i = 0; i < 14; ++i)
-	{
-		assert(msg.messageData->GetData()[i] == messageData[i]);
-	}
 
 	// Test 2)
 	// Receive the header
@@ -77,6 +82,18 @@ void MessageParserTest::RunTest()
 	// Receive the header
 	// Receive remainder of message in 3 chunks
 	// Last chunk has last chunk + entire next message
+}
+
+void MessageParserTest::Verify(const NetworkMessage& message) const
+{
+	assert(message.header.messageLength == 14);
+	assert(message.header.messageType == MessageType::Attack);
+	assert(message.messageData.GetSize() == 14);
+	for (int i = 0; i < 14; ++i)
+	{
+		assert(message.messageData.GetData()[i] == s_messageData[i]);
+	}
+	LOG_DEBUG("PASS: Single message parser test succeeded.");
 }
 
 //===============================================================================

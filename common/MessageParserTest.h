@@ -10,6 +10,7 @@
 namespace Common {
 
 class MessageParser;
+struct NetworkMessage;
 
 namespace Test {
 
@@ -20,7 +21,10 @@ class MessageParserTest
 public:
 	MessageParserTest();
 	~MessageParserTest();
-	void RunTest();
+	void RunTests();
+
+private:
+	void Verify(const NetworkMessage& message) const;
 
 private:
 	std::unique_ptr<MessageParser> m_parser;

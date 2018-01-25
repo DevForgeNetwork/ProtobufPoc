@@ -96,7 +96,7 @@ namespace Client {
 			SendTestMessageToServer();
 			break;
 		case sf::Keyboard::T:
-			m_parseTester->RunTest();
+			m_parseTester->RunTests();
 
 		default:
 			break;

@@ -36,7 +36,7 @@ struct MessageHeader
 struct NetworkMessage
 {
 	MessageHeader header;
-	std::unique_ptr<ByteBuffer> messageData;
+	ByteBuffer messageData;
 };
 
 //===============================================================================
