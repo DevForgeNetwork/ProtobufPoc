@@ -14,7 +14,7 @@ namespace Common {
 class ByteBuffer
 {
 public:
-	ByteBuffer();
+	ByteBuffer(int sizeOverride = -1);
 	~ByteBuffer();
 
 	// Returns raw byte data.

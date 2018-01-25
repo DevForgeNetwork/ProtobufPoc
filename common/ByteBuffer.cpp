@@ -13,8 +13,9 @@ namespace {
 	const uint32_t s_bufferSize = 64000;
 }
 
-ByteBuffer::ByteBuffer()
-	: m_data(std::make_unique<uint8_t[]>(s_bufferSize))
+ByteBuffer::ByteBuffer(int sizeOverride)
+	: m_data(sizeOverride > 0 ? std::make_unique<uint8_t[]>(static_cast<uint32_t>(sizeOverride)) :
+		std::make_unique<uint8_t[]>(s_bufferSize))
 {
 	InitializeData();
 }
