@@ -72,7 +72,6 @@ void MessageParser::BuildMessage(const uint8_t rawData[], uint32_t size, Network
 		{
 			// Copy remainder of the message to our active buffer.
 			int messageRemainder = size - overflow;
-			m_activeBuffer->SetData(rawData, messageRemainder);
 
 			// Copy full message into our message struct.
 			message.messageData->SetData(m_activeBuffer->GetData(), m_header.messageLength);
