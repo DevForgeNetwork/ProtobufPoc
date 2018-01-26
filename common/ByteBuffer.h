@@ -40,8 +40,13 @@ private:
 	void InitializeData();
 
 private:
-	std::unique_ptr<uint8_t[]> m_data;
+	// How many bytes of data we currently hold.
 	uint32_t m_size = 0;
+
+	// Size of the entire buffer.
+	uint32_t m_bufferSize = 0;
+
+	std::unique_ptr<uint8_t[]> m_data;
 
 	// Holds the biggest we've been since we've last been cleared. This is just an optimization.
 	// This way we don't need to clear the entire buffer, just up to our highest index.

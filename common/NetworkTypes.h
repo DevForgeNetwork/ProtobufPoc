@@ -35,6 +35,13 @@ struct MessageHeader
 
 struct NetworkMessage
 {
+	NetworkMessage() {}
+	NetworkMessage(const MessageHeader& h)
+		: header(h)
+		, messageData(header.messageLength)
+	{
+	}
+
 	MessageHeader header;
 	ByteBuffer messageData;
 };

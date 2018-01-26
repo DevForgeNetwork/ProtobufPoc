@@ -63,8 +63,7 @@ bool MessageParser::ParseMessage(const uint8_t rawData[], uint32_t size, std::ve
 			if (m_activeBuffer->GetSize() == m_header.messageLength)
 			{
 				// Package data into NetworkMessage and copy to out-data.
-				NetworkMessage msg;
-				msg.header = m_header;
+				NetworkMessage msg(m_header);
 				msg.messageData.SetData(m_activeBuffer->GetData(), m_header.messageLength);
 				messages.push_back(std::move(msg));
 
