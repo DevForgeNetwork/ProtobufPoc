@@ -45,9 +45,9 @@ void MessageParserTest::RunTests()
 	TestUneven();
 }
 
-void MessageParserTest::ClearBuffer(uint8_t buffer[])
+void MessageParserTest::ClearBuffer(uint8_t buffer[], int size)
 {
-	for (int i = 0; i < s_bufferSize; ++i)
+	for (int i = 0; i < size; ++i)
 	{
 		buffer[i] = 0;
 	}
@@ -104,6 +104,7 @@ void MessageParserTest::TestMulti()
 	}
 
 	hasMessages = m_parser->ParseMessage(netBuffer.get(), currentSize, messages);
+	assert(hasMessages);
 	for (int i = 0; i < numMessagesToSend; ++i)
 	{
 		Verify(messages[i]);
@@ -216,7 +217,7 @@ void MessageParserTest::MessageHelper::SendPartialData(uint8_t data[], int sizeT
 	std::vector<NetworkMessage>& messages, bool& hasMessages)
 {
 	hasMessages = m_tester->m_parser->ParseMessage(data, sizeToSend, messages);
-	m_tester->ClearBuffer(data);
+	m_tester->ClearBuffer(data, sizeToSend);
 	if (hasMessages)
 	{
 		Clear();

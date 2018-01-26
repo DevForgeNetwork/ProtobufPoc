@@ -26,7 +26,7 @@ public:
 	void RunTests();
 
 private:
-	void ClearBuffer(uint8_t buffer[]);
+	void ClearBuffer(uint8_t buffer[], int size);
 	void Verify(const NetworkMessage& message);
 	void TestSingle();
 	void TestMulti();
