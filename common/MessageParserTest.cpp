@@ -22,7 +22,8 @@ namespace
 {
 	const MessageHeader s_header{ MessageType::Attack, 14 };
 	const char s_messageData[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n' };
-	const int s_bufferSize = 100;
+	const int s_messageDataSize = 14;
+	const int s_bufferSize = 1024;
 }
 
 MessageParserTest::MessageParserTest()
@@ -40,8 +41,8 @@ void MessageParserTest::RunTests()
 {
 	TestSingle();
 	TestPartial();
-	TestUneven();
 	TestMulti();
+	TestUneven();
 }
 
 void MessageParserTest::ClearBuffer(uint8_t buffer[])
@@ -88,6 +89,26 @@ void MessageParserTest::TestMulti()
 {
 	// Test 4)
 	// Send 4 messages in one chunk.
+	std::unique_ptr<uint8_t[]> netBuffer = std::make_unique<uint8_t[]>(s_bufferSize);
+	std::vector<NetworkMessage> messages;
+	bool hasMessages = false;
+
+	int currentSize = 0;
+	for (int i = 0; i < 10; ++i)
+	{
+		std::memcpy(netBuffer.get() + currentSize, &s_header, sizeof(s_header));
+		currentSize += sizeof(s_header);
+		std::memcpy(netBuffer.get() + currentSize, s_messageData, s_messageDataSize);
+		currentSize += s_messageDataSize;
+	}
+
+	hasMessages = m_parser->ParseMessage(netBuffer.get(), currentSize, messages);
+	for (int i = 0; i < 10; ++i)
+	{
+		Verify(messages[i]);
+	}
+
+	LOG_DEBUG("PASS: Multi full-message parse test succeeded.");
 }
 
 void MessageParserTest::TestPartial()
