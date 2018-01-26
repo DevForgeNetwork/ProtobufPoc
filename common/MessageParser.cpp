@@ -28,14 +28,17 @@ MessageParser::~MessageParser()
 bool MessageParser::ParseMessage(const uint8_t rawData[], uint32_t size, std::vector<NetworkMessage>& messages)
 {
 	int headerOffset = 0;
+	int messageOffset = 0;
 	while (m_totalBytesParsed < size)
 	{
 		if (!m_isHeaderSet)
 		{
 			int startSize = m_activeBuffer->GetSize();
 
-			// Copy up to the full header data into the current buffer.
-			m_activeBuffer->SetData(rawData, std::min(size, s_headerSize - startSize));
+			// Copy up to the full header data into the current buffer. This header could start after
+			// the end of a previous message, so we need to account for that offset. We also need to account
+			// for the amount of bytes we've parse so far, so we copy the correct amount of header data.
+			m_activeBuffer->SetData(rawData + messageOffset, std::min(size - m_totalBytesParsed, s_headerSize - startSize));
 			m_totalBytesParsed += m_activeBuffer->GetSize();
 
 			// If we have a full header.
@@ -54,6 +57,9 @@ bool MessageParser::ParseMessage(const uint8_t rawData[], uint32_t size, std::ve
 		if (m_isHeaderSet && m_totalBytesParsed < size)
 		{
 			int sizeToCopy = std::min(size, m_header.messageLength - m_activeBuffer->GetSize());
+			// Note the amount of data copied for this message in case there is header data after
+			// these bytes. This way, the header will know where it should begin.
+			messageOffset = sizeToCopy;
 
 			// Copy up to full message data into current buffer.
 			m_activeBuffer->SetData(rawData + headerOffset, sizeToCopy);

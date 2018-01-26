@@ -177,6 +177,48 @@ void MessageParserTest::TestUneven()
 	// Send remainder of message in 3 chunks.
 	// Last chunk has first 2 bytes of next message header.
 	// Send rest of data in one chunk.
+	std::unique_ptr<uint8_t[]> netBuffer = std::make_unique<uint8_t[]>(s_bufferSize);
+
+	std::vector<NetworkMessage> messages;
+	bool hasMessages = false;
+
+	m_helper.SendPartialHeader(netBuffer.get(), 8, messages, hasMessages);
+	m_helper.Clear();
+
+	m_helper.SendPartialMessage(netBuffer.get(), 11, messages, hasMessages);
+	assert(!hasMessages);
+	m_helper.SendPartialMessage(netBuffer.get(), 2, messages, hasMessages);
+	assert(!hasMessages);
+
+	// TODO: Either don't use helper at all for this or modify helper so it can be used for this.
+	// Mixing the two patterns is no fun.
+	m_helper.Clear();
+
+	// Last byte of message.
+	std::memcpy(netBuffer.get(), s_messageData + 13, 1);
+
+	// First 2 bytes of header.
+	std::memcpy(netBuffer.get() + 1, &s_header, 2);
+	hasMessages = m_parser->ParseMessage(netBuffer.get(), 3, messages);
+	assert(hasMessages);
+	ClearBuffer(netBuffer.get(), 3);
+
+	// Next 6 bytes of header.
+	std::unique_ptr<uint8_t[]> temp = std::make_unique<uint8_t[]>(sizeof(s_header));
+	std::memcpy(temp.get(), &s_header, sizeof(s_header));
+
+	// Full next message.
+	std::memcpy(netBuffer.get(), temp.get() + 2, 6);
+	std::memcpy(netBuffer.get() + 6, s_messageData, 14);
+	hasMessages = m_parser->ParseMessage(netBuffer.get(), 20, messages);
+
+	assert(hasMessages);
+	ClearBuffer(netBuffer.get(), 20);
+
+	Verify(messages[0]);
+	Verify(messages[1]);
+
+	LOG_DEBUG("PASS: Uneven message parse test succeeded.");
 
 	// Test 5)
 	// Send the header.
@@ -191,19 +233,19 @@ MessageParserTest::MessageHelper::MessageHelper(MessageParserTest* tester)
 }
 
 void MessageParserTest::MessageHelper::SendPartialMessage(uint8_t data[], int sizeToSend,
-	std::vector<NetworkMessage>& messages, bool& hasMessages)
+	std::vector<NetworkMessage>& messages, bool& hasMessages, int offset)
 {
-	std::memcpy(data, s_messageData + m_sizeSent, sizeToSend);
+	std::memcpy(data, s_messageData + m_sizeSent + offset, sizeToSend);
 	m_sizeSent += sizeToSend;
 	SendPartialData(data, sizeToSend, messages, hasMessages);
 }
 
 void MessageParserTest::MessageHelper::SendPartialHeader(uint8_t data[], int sizeToSend,
-	std::vector<NetworkMessage>& messages, bool& hasMessages)
+	std::vector<NetworkMessage>& messages, bool& hasMessages, int offset)
 {
 	std::unique_ptr<uint8_t[]> temp = std::make_unique<uint8_t[]>(sizeof(s_header));
 	std::memcpy(temp.get(), &s_header, sizeof(s_header));
-	std::memcpy(data, temp.get() + m_sizeSent, sizeToSend);
+	std::memcpy(data, temp.get() + m_sizeSent + offset, sizeToSend);
 	m_sizeSent += sizeToSend;
 	SendPartialData(data, sizeToSend, messages, hasMessages);
 }

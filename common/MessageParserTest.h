@@ -39,9 +39,9 @@ private:
 		MessageHelper(MessageParserTest* tester);
 
 		void SendPartialMessage(uint8_t data[], int sizeToSend,
-			std::vector<NetworkMessage>& messages, bool& hasMessages);
+			std::vector<NetworkMessage>& messages, bool& hasMessages, int offset = 0);
 		void SendPartialHeader(uint8_t data[], int sizeToSend,
-			std::vector<NetworkMessage>& messages, bool& hasMessages);
+			std::vector<NetworkMessage>& messages, bool& hasMessages, int offset = 0);
 
 		// This should be called between sending a header and a message.
 		void Clear();
