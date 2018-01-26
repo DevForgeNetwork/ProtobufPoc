@@ -217,13 +217,41 @@ void MessageParserTest::TestUneven()
 
 	Verify(messages[0]);
 	Verify(messages[1]);
-
-	LOG_DEBUG("PASS: Uneven message parse test succeeded.");
+	messages.clear();
+	LOG_DEBUG("PASS: Uneven message parse test 1 succeeded.");
 
 	// Test 5)
 	// Send the header.
 	// Send remainder of message in 3 chunks.
-	// Last chunk has last chunk + entire next message.
+	// Last chunk has remainder of message + entire next message.
+	m_helper.SendPartialHeader(netBuffer.get(), 8, messages, hasMessages);
+	m_helper.Clear();
+
+	// First byte of message.
+	m_helper.SendPartialMessage(netBuffer.get(), 1, messages, hasMessages);
+	assert(!hasMessages);
+
+	// Next 7 bytes of message.
+	m_helper.SendPartialMessage(netBuffer.get(), 7, messages, hasMessages);
+	assert(!hasMessages);
+	m_helper.Clear();
+
+	// Last 6 bytes of message.
+	std::memcpy(netBuffer.get(), s_messageData + 8, 6);
+
+	// Header of next message.
+	std::memcpy(netBuffer.get() + 6, &s_header, sizeof(s_header));
+
+	// message data of message 2.
+	std::memcpy(netBuffer.get() + 14, s_messageData, 14);
+	hasMessages = m_parser->ParseMessage(netBuffer.get(), 28 , messages);
+	assert(hasMessages);
+	assert(messages.size() == 2);
+	Verify(messages[0]);
+	Verify(messages[1]);
+	ClearBuffer(netBuffer.get(), 28);
+
+	LOG_DEBUG("PASS: Uneven message parse test 2 succeeded.");
 }
 
 //--------------------------------------------------------------------------------

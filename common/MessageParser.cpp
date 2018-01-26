@@ -48,7 +48,7 @@ bool MessageParser::ParseMessage(const uint8_t rawData[], uint32_t size, std::ve
 				m_isHeaderSet = true;
 
 				// If this set of raw data contains header data, note the offset for our message.
-				headerOffset = s_headerSize - startSize;
+				headerOffset = (s_headerSize - startSize) + messageOffset;
 
 				// Message data goes into the next buffer.
 				SwapBuffer();
@@ -59,7 +59,7 @@ bool MessageParser::ParseMessage(const uint8_t rawData[], uint32_t size, std::ve
 			int sizeToCopy = std::min(size, m_header.messageLength - m_activeBuffer->GetSize());
 			// Note the amount of data copied for this message in case there is header data after
 			// these bytes. This way, the header will know where it should begin.
-			messageOffset = sizeToCopy;
+			messageOffset = sizeToCopy + headerOffset;
 
 			// Copy up to full message data into current buffer.
 			m_activeBuffer->SetData(rawData + headerOffset, sizeToCopy);
