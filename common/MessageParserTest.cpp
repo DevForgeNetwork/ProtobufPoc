@@ -74,10 +74,10 @@ void MessageParserTest::TestSingle()
 	bool hasMessages = false;
 	assert(sizeof(s_header) == 8);
 
+	std::memcpy(netBuffer.get(), &s_header, sizeof(s_header));
+	std::memcpy(netBuffer.get() + sizeof(s_header), s_messageData, s_messageDataSize);
 
-	m_helper.SendPartialHeader(netBuffer.get(), 8, messages, hasMessages);
-	m_helper.Clear();
-	m_helper.SendPartialMessage(netBuffer.get(), 14, messages, hasMessages);
+	hasMessages = m_parser->ParseMessage(netBuffer.get(), 22, messages);
 
 	assert(hasMessages);
 	Verify(messages[0]);
