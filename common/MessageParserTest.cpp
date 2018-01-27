@@ -10,8 +10,102 @@
 #include "MessageParser.h"
 #include "NetworkTypes.h"
 
-
 #include <assert.h>
+
+/************************************************************************/
+/*
+	Test multiple messages in one chunk.
+	Header                     Message
+	[.][.][.][.][.][.][.][.] | [.][.][.][.][.][.][.][.][.][.][.][.][.][.]
+	... X 2900
+*/
+/************************************************************************/
+
+/************************************************************************/
+/*
+	Test Single full message
+	Header                     Message
+	[.][.][.][.][.][.][.][.] | [.][.][.][.][.][.][.][.][.][.][.][.][.][.]
+*/
+/************************************************************************/
+
+/************************************************************************/
+/*
+	Partial Test 1)
+	Header
+	[.][.][.][.][.][.][.][.]
+
+	Message
+	[.][.][.]
+
+	Message
+	[.][.][.][.][.][.]
+
+	Message
+	[.][.][.][.][.]
+
+	Partial Test 2)
+	Header
+	[.][.]
+
+	[.][.][.]
+
+	[.]
+
+	Message
+	[.][.][.][.][.][.][.]
+
+	Message
+	[.][.][.][.][.][.][.]
+
+*/
+/************************************************************************/
+
+/************************************************************************/
+/*
+	Uneven Test 1)
+	Header
+	[.][.][.][.][.][.][.][.]
+
+	Message
+	[.][.][.][.][.][.][.][.][.][.][.]
+
+	Message
+	[.][.]
+
+	Message   Header
+	[.]     | [.][.]
+
+	Header               Message
+	[.][.][.][.][.][.] | [.][.][.][.][.][.][.][.][.][.][.][.][.][.]
+
+	Uneven Test 2)
+	Header
+	[.][.][.][.][.][.][.][.]
+
+	Message
+	[.]
+
+	Message
+	[.][.][.][.][.][.][.]
+
+	Message              Header                     Message
+	[.][.][.][.][.][.] | [.][.][.][.][.][.][.][.] | [.][.][.][.][.][.][.][.][.][.][.][.][.][.]
+
+	Uneven Test 3)
+	Header
+	[.][.][.][.][.][.][.][.]
+
+	Message
+	[.]
+
+	Message
+	[.][.][.][.][.][.][.]
+
+	Message              Header                     Message
+	[.][.][.][.][.][.] | [.][.][.][.][.][.][.][.] | [.][.][.][.][.][.][.][.][.][.][.][.][.][.] + 3 full messages.
+*/
+/************************************************************************/
 
 namespace Common {
 namespace Test {
@@ -85,10 +179,11 @@ void MessageParserTest::TestSingle()
 	LOG_DEBUG("PASS: Single message parse test succeeded.");
 }
 
+
 void MessageParserTest::TestMulti()
 {
-	// Test 4)
-	// Send 4 messages in one chunk.
+	// Test 1)
+	// Send 2900 messages in one chunk.
 	int numMessagesToSend = 2900;
 	std::unique_ptr<uint8_t[]> netBuffer = std::make_unique<uint8_t[]>(s_bufferSize);
 	std::vector<NetworkMessage> messages;
@@ -105,9 +200,9 @@ void MessageParserTest::TestMulti()
 
 	hasMessages = m_parser->ParseMessage(netBuffer.get(), currentSize, messages);
 	assert(hasMessages);
-	for (int i = 0; i < numMessagesToSend; ++i)
+	for (auto it = std::begin(messages); it != messages.end(); ++it)
 	{
-		Verify(messages[i]);
+		Verify(*it);
 	}
 
 	LOG_DEBUG("PASS: Multi full-message parse test succeeded.");
@@ -115,7 +210,7 @@ void MessageParserTest::TestMulti()
 
 void MessageParserTest::TestPartial()
 {
-	// Test 2)
+	// Test 1)
 	// Send the header
 	// Send remainder of message in 3 chunks
 	// - 3 bytes, 6 bytes, 5 bytes.
@@ -143,7 +238,7 @@ void MessageParserTest::TestPartial()
 	LOG_DEBUG("PASS: Partial data message parse test succeeded.");
 	messages.pop_back();
 
-	// Test 6)
+	// Test 2)
 	// Send header in 4 chunks: 2 bytes, 2 bytes, 3 bytes, 1 byte.
 	// Send message in 2, 7 byte chunks.
 
@@ -172,7 +267,7 @@ void MessageParserTest::TestPartial()
 
 void MessageParserTest::TestUneven()
 {
-	// Test 3)
+	// Test 1)
 	// Send the header.
 	// Send remainder of message in 3 chunks.
 	// Last chunk has first 2 bytes of next message header.
@@ -220,7 +315,7 @@ void MessageParserTest::TestUneven()
 	messages.clear();
 	LOG_DEBUG("PASS: Uneven message parse test 1 succeeded.");
 
-	// Test 5)
+	// Test 2)
 	// Send the header.
 	// Send remainder of message in 3 chunks.
 	// Last chunk has remainder of message + entire next message.
@@ -247,11 +342,63 @@ void MessageParserTest::TestUneven()
 	hasMessages = m_parser->ParseMessage(netBuffer.get(), 28 , messages);
 	assert(hasMessages);
 	assert(messages.size() == 2);
+
 	Verify(messages[0]);
 	Verify(messages[1]);
+	messages.clear();
 	ClearBuffer(netBuffer.get(), 28);
 
 	LOG_DEBUG("PASS: Uneven message parse test 2 succeeded.");
+
+	// Test 3)
+	// Send the header.
+	// Send remainder of message in 3 chunks.
+	// Last chunk has remainder of message + 3 more messages.
+
+	m_helper.SendPartialHeader(netBuffer.get(), 8, messages, hasMessages);
+	m_helper.Clear();
+
+	// First byte of message.
+	m_helper.SendPartialMessage(netBuffer.get(), 1, messages, hasMessages);
+	assert(!hasMessages);
+
+	// Next 7 bytes of message.
+	m_helper.SendPartialMessage(netBuffer.get(), 7, messages, hasMessages);
+	assert(!hasMessages);
+	m_helper.Clear();
+
+	// Last 6 bytes of message.
+	std::memcpy(netBuffer.get(), s_messageData + 8, 6);
+
+	// Header of next message.
+	std::memcpy(netBuffer.get() + 6, &s_header, sizeof(s_header));
+
+	// Message data of message 2.
+	std::memcpy(netBuffer.get() + 14, s_messageData, 14);
+
+	int numMessagesToSend = 3;
+	int currentSize = 28;
+	for (int i = 0; i < numMessagesToSend; ++i)
+	{
+		std::memcpy(netBuffer.get() + currentSize, &s_header, sizeof(s_header));
+		currentSize += sizeof(s_header);
+		std::memcpy(netBuffer.get() + currentSize, s_messageData, s_messageDataSize);
+		currentSize += s_messageDataSize;
+	}
+
+	hasMessages = m_parser->ParseMessage(netBuffer.get(), currentSize, messages);
+	assert(hasMessages);
+	assert(messages.size() == numMessagesToSend + 2);
+
+	for (auto it = std::begin(messages); it != messages.end(); ++it)
+	{
+		Verify(*it);
+	}
+
+	messages.clear();
+	ClearBuffer(netBuffer.get(), currentSize);
+
+	LOG_DEBUG("PASS: Uneven message parse test 3 succeeded.");
 }
 
 //--------------------------------------------------------------------------------
