@@ -50,7 +50,7 @@ private:
 
 	// Holds the biggest we've been since we've last been cleared. This is just an optimization.
 	// This way we don't need to clear the entire buffer, just up to our highest index.
-	uint32_t m_maxSinceClear;
+	uint32_t m_maxSinceClear = 0;
 };
 
 //===============================================================================
