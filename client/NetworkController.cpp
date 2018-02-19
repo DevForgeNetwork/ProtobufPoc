@@ -79,6 +79,11 @@ void NetworkController::ConnectToServer(const std::string& address, int port)
 	}
 }
 
+void NetworkController::SendMessageToServer(Common::MessageType type, uint8_t message[], uint32_t messageLength)
+{
+	m_networkHelper->QueueMessage(type, message, messageLength);
+}
+
 bool NetworkController::IsConnected() const
 {
 	return m_connection->IsConnected();

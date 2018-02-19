@@ -7,8 +7,6 @@
 
 #include "client/NetworkController.h"
 #include "common/Log.h"
-#include "common/NetworkHelper.h"
-#include "common/NetworkTypes.h"
 #include "common/MessageParser.h"
 #include "common/MessageParserTest.h"
 #include "common/ProtobufTestDummy.h"
@@ -122,8 +120,8 @@ namespace Client {
 	{
 		auto& creatureBytes = m_protobufTestDummy->ToBytes();
 
-		// TODO: Send message to NetworkController
-		//m_networkHelper->QueueMessage(Common::MessageType::Creature, creatureBytes.first, creatureBytes.second);
+		m_networkController->SendMessageToServer(Common::MessageType::Creature, creatureBytes.first,
+			creatureBytes.second);
 	}
 
 	//===============================================================================
