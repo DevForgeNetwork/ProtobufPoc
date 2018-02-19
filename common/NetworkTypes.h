@@ -36,9 +36,14 @@ struct MessageHeader
 struct NetworkMessage
 {
 	NetworkMessage() {}
+	NetworkMessage(NetworkMessage&& m)
+		: header(std::move(m.header))
+		, messageData(std::move(m.messageData))
+	{
+	}
+
 	NetworkMessage(const MessageHeader& h)
 		: header(h)
-		, messageData(header.messageLength)
 	{
 	}
 
