@@ -262,7 +262,7 @@ void MessageParserTest::TestPartial()
 	assert(hasMessages);
 
 	Verify(messages[0]);
-	LOG_DEBUG("PASS: Partial header and parse test succeeded.");
+	LOG_DEBUG("PASS: Partial header and data parse test succeeded.");
 }
 
 void MessageParserTest::TestUneven()
