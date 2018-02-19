@@ -17,7 +17,6 @@ namespace {
 }
 
 ByteBuffer::ByteBuffer()
-	: m_bufferSize(s_defaultBufferSize)
 {
 }
 

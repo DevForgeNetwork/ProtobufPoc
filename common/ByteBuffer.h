@@ -47,9 +47,6 @@ private:
 	// How many bytes of data we currently hold.
 	uint32_t m_size = 0;
 
-	// Size of the entire buffer.
-	uint32_t m_bufferSize = 0;
-
 	// Small buffer optimization. Will have 64 bytes on the stack. If we need more we'll move to the heap.
 	uint8_t m_stackBuffer[64] = { 0 };
 
