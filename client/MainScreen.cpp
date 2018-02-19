@@ -22,108 +22,108 @@ namespace Client {
 
 //===============================================================================
 
-	namespace
-	{
-		const std::string s_fontPath = "resources/fonts/arial.ttf";
-	}
+namespace
+{
+	const std::string s_fontPath = "resources/fonts/arial.ttf";
+}
 
-	MainScreen::MainScreen(sf::RenderWindow* window)
-		: m_window(window)
-		, m_font(new sf::Font)
-		, m_networkController(new NetworkController)
-		, m_protobufTestDummy(new Common::Test::ProtobufTestDummy{ 16, 14, 8, "Dragon" })
-		, m_parseTester(new Common::Test::MessageParserTest)
+MainScreen::MainScreen(sf::RenderWindow* window)
+	: m_window(window)
+	, m_font(new sf::Font)
+	, m_networkController(new NetworkController)
+	, m_protobufTestDummy(new Common::Test::ProtobufTestDummy{ 16, 14, 8, "Dragon" })
+	, m_parseTester(new Common::Test::MessageParserTest)
+{
+	if (!m_font->loadFromFile(s_fontPath))
 	{
-		if (!m_font->loadFromFile(s_fontPath))
+		LOG_DEBUG("Error: Could not find font. path=" + s_fontPath);
+	}
+}
+
+MainScreen::~MainScreen()
+{
+
+}
+
+void MainScreen::ProcessEvents()
+{
+	sf::Event e;
+	while (m_window->pollEvent(e))
+	{
+		if (e.type == sf::Event::Closed)
 		{
-			LOG_DEBUG("Error: Could not find font. path=" + s_fontPath);
+			m_window->close();
+		}
+
+		if (e.type == sf::Event::KeyPressed)
+		{
+			HandleKeyPress(e.key);
 		}
 	}
 
-	MainScreen::~MainScreen()
+	if (m_shouldConnect)
 	{
-
+		ConnectToServer();
 	}
+}
 
-	void MainScreen::ProcessEvents()
+void MainScreen::Draw()
+{
+	// We must have a valid window to draw to.
+	assert(m_window);
+	m_window->clear(sf::Color::Black);
+
+	sf::Text connectText;
+	connectText.setOutlineColor(sf::Color::Red);
+	connectText.setFont(*m_font.get());
+	connectText.setString("Press 'c' to connect to Server.");
+
+	sf::Text sendMessageText;
+	sendMessageText.setOutlineColor(sf::Color::Red);
+	sendMessageText.setFont(*m_font.get());
+	sendMessageText.setString("Press 's' to send a message to Server.");
+
+	m_window->draw(m_networkController->IsConnected() ? sendMessageText : connectText);
+
+	m_window->display();
+}
+
+void MainScreen::HandleKeyPress(const sf::Event::KeyEvent& e)
+{
+	switch (e.code)
 	{
-		sf::Event e;
-		while (m_window->pollEvent(e))
-		{
-			if (e.type == sf::Event::Closed)
-			{
-				m_window->close();
-			}
+	case sf::Keyboard::C:
+		m_shouldConnect = true;
+		break;
+	case sf::Keyboard::S:
+		SendTestMessageToServer();
+		break;
+	case sf::Keyboard::T:
+		m_parseTester->RunTests();
 
-			if (e.type == sf::Event::KeyPressed)
-			{
-				HandleKeyPress(e.key);
-			}
-		}
-
-		if (m_shouldConnect)
-		{
-			ConnectToServer();
-		}
+	default:
+		break;
 	}
+}
 
-	void MainScreen::Draw()
+void MainScreen::ConnectToServer()
+{
+	m_networkController->ConnectToServer();
+
+	if (m_networkController->IsConnected())
 	{
-		// We must have a valid window to draw to.
-		assert(m_window);
-		m_window->clear(sf::Color::Black);
-
-		sf::Text connectText;
-		connectText.setOutlineColor(sf::Color::Red);
-		connectText.setFont(*m_font.get());
-		connectText.setString("Press 'c' to connect to Server.");
-
-		sf::Text sendMessageText;
-		sendMessageText.setOutlineColor(sf::Color::Red);
-		sendMessageText.setFont(*m_font.get());
-		sendMessageText.setString("Press 's' to send a message to Server.");
-
-		m_window->draw(m_networkController->IsConnected() ? sendMessageText : connectText);
-
-		m_window->display();
+		m_shouldConnect = false;
 	}
+}
 
-	void MainScreen::HandleKeyPress(const sf::Event::KeyEvent& e)
-	{
-		switch (e.code)
-		{
-		case sf::Keyboard::C:
-			m_shouldConnect = true;
-			break;
-		case sf::Keyboard::S:
-			SendTestMessageToServer();
-			break;
-		case sf::Keyboard::T:
-			m_parseTester->RunTests();
+void MainScreen::SendTestMessageToServer()
+{
+	auto& creatureBytes = m_protobufTestDummy->ToBytes();
 
-		default:
-			break;
-		}
-	}
+	m_networkController->SendMessageToServer(Common::MessageType::Creature, creatureBytes.first,
+		creatureBytes.second);
+}
 
-	void MainScreen::ConnectToServer()
-	{
-		m_networkController->ConnectToServer();
-
-		if (m_networkController->IsConnected())
-		{
-			m_shouldConnect = false;
-		}
-	}
-
-	void MainScreen::SendTestMessageToServer()
-	{
-		auto& creatureBytes = m_protobufTestDummy->ToBytes();
-
-		m_networkController->SendMessageToServer(Common::MessageType::Creature, creatureBytes.first,
-			creatureBytes.second);
-	}
-
-	//===============================================================================
+//===============================================================================
 
 } // namespace Client
