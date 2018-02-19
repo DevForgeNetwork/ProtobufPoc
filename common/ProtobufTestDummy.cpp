@@ -27,7 +27,7 @@ ProtobufTestDummy::~ProtobufTestDummy()
 
 }
 
-std::pair<uint8_t*, int> ProtobufTestDummy::ToBytes()
+std::pair<uint8_t*, int> ProtobufTestDummy::ToBytes() const
 {
 	poc::ProtobufTestDummy testProto = ToProtobuf();
 
@@ -40,13 +40,13 @@ std::pair<uint8_t*, int> ProtobufTestDummy::ToBytes()
 	return { buffer.get(), testProto.ByteSize() };
 }
 
-ProtobufTestDummy ProtobufTestDummy::FromProtobuf(const poc::ProtobufTestDummy& testProto)
+ProtobufTestDummy ProtobufTestDummy::FromProtobuf(const poc::ProtobufTestDummy* creatureProto) const
 {
-	return ProtobufTestDummy{ testProto.mana(), testProto.health(),
-		testProto.speed(), testProto.name() };
+	return ProtobufTestDummy{ creatureProto->mana(), creatureProto->health(),
+		creatureProto->speed(), creatureProto->name() };
 }
 
-poc::ProtobufTestDummy ProtobufTestDummy::ToProtobuf()
+poc::ProtobufTestDummy ProtobufTestDummy::ToProtobuf() const
 {
 	poc::ProtobufTestDummy protobufTestDummy;
 	protobufTestDummy.set_mana(m_mana);

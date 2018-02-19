@@ -147,6 +147,7 @@
     <ClInclude Include="MessageParserTest.h" />
     <ClInclude Include="NetworkHelper.h" />
     <ClInclude Include="NetworkTypes.h" />
+    <ClInclude Include="ProtoAdapter.h" />
     <ClInclude Include="ProtobufTestDummy.h" />
     <ClInclude Include="proto\poc.pb.h" />
   </ItemGroup>

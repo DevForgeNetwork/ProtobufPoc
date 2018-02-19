@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include "common/ProtoAdapter.h"
 #include "proto/poc.pb.h"
 
 #include <memory>
@@ -15,21 +16,18 @@ namespace Test {
 
 //===============================================================================
 
-class ProtobufTestDummy
+
+class ProtobufTestDummy : public ProtoAdapter<poc::ProtobufTestDummy, ProtobufTestDummy>
 {
 public:
 	ProtobufTestDummy();
 	ProtobufTestDummy(int mana, int health, int speed, const std::string& name);
 	~ProtobufTestDummy();
 
-	// Returns the array of serialized data in bytes.
-	std::pair<uint8_t*, int> ToBytes();
-	
-	// Convert to struct.
-	ProtobufTestDummy FromProtobuf(const poc::ProtobufTestDummy& creatureProto);
-
-	// Convert to protobuf.
-	poc::ProtobufTestDummy ToProtobuf();
+	// Adapter implementation.
+	virtual std::pair<uint8_t*, int> ToBytes() const override;
+	virtual ProtobufTestDummy FromProtobuf(const poc::ProtobufTestDummy* creatureProto) const override;
+	virtual poc::ProtobufTestDummy ToProtobuf() const override;
 
 private:
 	int32_t m_mana;
