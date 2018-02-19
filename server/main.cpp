@@ -4,6 +4,7 @@
 //
 
 #include "Common/Log.h"
+#include "Common/NetworkHelper.h"
 
 #include <memory>
 #include <SFML/Network.hpp>
@@ -13,26 +14,6 @@ namespace {
 	const uint32_t s_minConnectedClients = 1;
 }
 
-class Connection
-{
-public:
-	Connection()
-		: m_isConnected(false)
-	{
-		m_socketConnection.setBlocking(false);
-	}
-
-	sf::TcpSocket& GetSocket() { return m_socketConnection; }
-	bool IsConnnected() { return m_isConnected; }
-
-	// These two are separate functions for verbosity.
-	void Disconnect() { m_isConnected = false; }
-	void Connect() { m_isConnected = true; }
-
-private:
-	sf::TcpSocket m_socketConnection;
-	bool m_isConnected;
-};
 
 //-----------------------------------------------------------------------------------
 
@@ -51,25 +32,39 @@ public:
 		}
 	}
 
+	~Server() {}
+
 	void Run()
 	{
 		while (m_connections.size() < s_minConnectedClients)
 		{
 			CheckConnectionRequests();
 		}
+
+		bool isRunning = true;
+		while (isRunning)
+		{
+			m_networkHelper.SendMessages(m_connections.front());
+			m_networkHelper.ReceiveMessages(m_connections.front());
+		}
 	}
 
 private:
 	void CheckConnectionRequests()
 	{
-		sf::Socket::Status status = m_listener.accept(m_connection.GetSocket());
+		Common::Connection c;
+		sf::Socket::Status status = m_listener.accept(*c.socket.get());
 		LOG_DEBUG_CONSOLE("status" + std::to_string(static_cast<int>(status)));
+		if (status == sf::Socket::Done)
+		{
+			m_connections.push_back(std::move(c));
+		}
 	}
 
 private:
+	Common::NetworkHelper m_networkHelper;
 	sf::TcpListener m_listener;
-	std::vector<std::unique_ptr<Connection>> m_connections;
-	Connection m_connection;
+	std::vector<Common::Connection> m_connections;
 };
 
 //-----------------------------------------------------------------------------------

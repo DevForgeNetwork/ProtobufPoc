@@ -46,6 +46,8 @@ struct NetworkMessage
 	ByteBuffer messageData;
 };
 
+
+
 //===============================================================================
 
 } // namespace Common

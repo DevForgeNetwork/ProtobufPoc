@@ -16,7 +16,8 @@ namespace sf {
 }
 
 namespace Common {
-	class NetworkController;
+	class Connection;
+	class NetworkHelper;
 	namespace Test {
 		class MessageParserTest;
 		class ProtobufTestDummy;
@@ -27,7 +28,7 @@ namespace Client {
 
 //===============================================================================
 
-class ClientNetworkController;
+class NetworkController;
 
 class MainScreen : public Screen
 {
@@ -51,9 +52,11 @@ private:
 	sf::RenderWindow* m_window;
 	std::unique_ptr<sf::Font> m_font;
 
-	std::unique_ptr<Common::NetworkController> m_networkController;
 	std::unique_ptr<Common::Test::ProtobufTestDummy> m_protobufTestDummy;
 	std::unique_ptr<Common::Test::MessageParserTest> m_parseTester;
+	std::unique_ptr<NetworkController> m_networkController;
+
+	bool m_shouldConnect = false;
 };
 
 //===============================================================================

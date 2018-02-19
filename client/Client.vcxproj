@@ -120,6 +120,7 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainScreen.cpp" />
+    <ClCompile Include="NetworkController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\common\Common.vcxproj">
@@ -132,6 +133,7 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="MainScreen.h" />
+    <ClInclude Include="NetworkController.h" />
     <ClInclude Include="Screen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

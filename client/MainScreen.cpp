@@ -4,8 +4,10 @@
 //
 
 #include "MainScreen.h"
+
+#include "client/NetworkController.h"
 #include "common/Log.h"
-#include "common/NetworkController.h"
+#include "common/NetworkHelper.h"
 #include "common/NetworkTypes.h"
 #include "common/MessageParser.h"
 #include "common/MessageParserTest.h"
@@ -30,7 +32,7 @@ namespace Client {
 	MainScreen::MainScreen(sf::RenderWindow* window)
 		: m_window(window)
 		, m_font(new sf::Font)
-		, m_networkController(new Common::NetworkController)
+		, m_networkController(new NetworkController)
 		, m_protobufTestDummy(new Common::Test::ProtobufTestDummy{ 16, 14, 8, "Dragon" })
 		, m_parseTester(new Common::Test::MessageParserTest)
 	{
@@ -61,7 +63,10 @@ namespace Client {
 			}
 		}
 
-		m_networkController->SendMessages();
+		if (m_shouldConnect)
+		{
+			ConnectToServer();
+		}
 	}
 
 	void MainScreen::Draw()
@@ -90,7 +95,7 @@ namespace Client {
 		switch (e.code)
 		{
 		case sf::Keyboard::C:
-			ConnectToServer();
+			m_shouldConnect = true;
 			break;
 		case sf::Keyboard::S:
 			SendTestMessageToServer();
@@ -105,14 +110,20 @@ namespace Client {
 
 	void MainScreen::ConnectToServer()
 	{
-		m_networkController->ConnectToServer(std::string());
+		m_networkController->ConnectToServer();
+
+		if (m_networkController->IsConnected())
+		{
+			m_shouldConnect = false;
+		}
 	}
 
 	void MainScreen::SendTestMessageToServer()
 	{
 		auto& creatureBytes = m_protobufTestDummy->ToBytes();
 
-		m_networkController->QueueMessage(Common::MessageType::Creature, creatureBytes.first, creatureBytes.second);
+		// TODO: Send message to NetworkController
+		//m_networkHelper->QueueMessage(Common::MessageType::Creature, creatureBytes.first, creatureBytes.second);
 	}
 
 	//===============================================================================

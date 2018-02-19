@@ -44,9 +44,6 @@
     <ClCompile Include="Log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NetworkController.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
     <ClCompile Include="MessageParser.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
@@ -59,6 +56,9 @@
     <ClCompile Include="ProtobufTestDummy.cpp">
       <Filter>Source Files\Test</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkHelper.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="proto\poc.pb.h">
@@ -68,9 +68,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NetworkTypes.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkController.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="MessageParser.h">
@@ -84,6 +81,9 @@
     </ClInclude>
     <ClInclude Include="ProtobufTestDummy.h">
       <Filter>Header Files\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkHelper.h">
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

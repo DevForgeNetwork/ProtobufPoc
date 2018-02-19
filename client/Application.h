@@ -12,6 +12,7 @@ namespace Client {
 
 //===============================================================================
 
+class NetworkController;
 class Screen;
 
 class Application
@@ -24,6 +25,7 @@ public:
 private:
 	std::unique_ptr<sf::RenderWindow> m_mainWindow;
 	std::unique_ptr<Screen> m_screen;
+	std::unique_ptr<NetworkController> m_networkController;
 };
 
 //===============================================================================

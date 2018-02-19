@@ -5,7 +5,8 @@
 
 #include "Application.h"
 
-#include "MainScreen.h"
+#include "client/MainScreen.h"
+#include "client/NetworkController.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/VideoMode.hpp>
@@ -17,6 +18,7 @@ namespace Client {
 Application::Application()
 	: m_mainWindow(new sf::RenderWindow(sf::VideoMode(640, 480), "Client"))
 	, m_screen(new MainScreen(m_mainWindow.get()))
+	, m_networkController(new NetworkController)
 {
 	m_mainWindow->setFramerateLimit(60);
 }
