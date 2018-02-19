@@ -68,7 +68,9 @@ void ByteBuffer::ClearData()
 	m_size = 0;
 	m_maxSinceClear = 0;
 
+	// Reclaim memory.
 	m_heapBuffer.clear();
+	m_heapBuffer.shrink_to_fit();
 
 	// We just cleared data, go back to using stack memory unless we must use heap.
 	m_activeBuffer = &m_stackBuffer[0];
@@ -76,7 +78,7 @@ void ByteBuffer::ClearData()
 
 void ByteBuffer::ExpandBuffer(int newSize)
 {
-	if (newSize >= m_heapBuffer.size())
+	if (newSize >= static_cast<int>(m_heapBuffer.size()))
 	{
 		int resizeTo = m_heapBuffer.size() + s_defaultBufferSize;
 		while (resizeTo < newSize)
