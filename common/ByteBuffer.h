@@ -28,7 +28,7 @@ public:
 	uint8_t GetSize() const { return m_size; }
 
 	// Sets the raw data and increments the size.
-	void SetData(const uint8_t data[], uint8_t size);
+	void SetData(const uint8_t* data, uint8_t size);
 
 	// Clear raw data and reset size.
 	void ClearData();

@@ -45,7 +45,7 @@ const uint8_t* ByteBuffer::GetData() const
 	return m_activeBuffer;
 }
 
-void ByteBuffer::SetData(const uint8_t data[], uint8_t size)
+void ByteBuffer::SetData(const uint8_t* data, uint8_t size)
 {
 	int newSize = size + m_size;
 	if (newSize <= s_defaultBufferSize)
