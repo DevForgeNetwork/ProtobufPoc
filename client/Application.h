@@ -20,6 +20,8 @@ class Application
 public:
 	Application();
 	~Application();
+
+	NetworkController* GetNetworkController() { return m_networkController.get(); }
 	void Run();
 
 private:

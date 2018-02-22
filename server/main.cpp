@@ -44,8 +44,8 @@ public:
 		bool isRunning = true;
 		while (isRunning)
 		{
-			m_networkHelper.SendMessages(m_connections.front());
-			m_networkHelper.ReceiveMessages(m_connections.front());
+			m_networkHelper.SendMessages(&m_connections.front());
+			m_networkHelper.ReceiveMessages(&m_connections.front());
 		}
 	}
 

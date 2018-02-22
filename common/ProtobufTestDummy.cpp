@@ -20,24 +20,36 @@ ProtobufTestDummy::ProtobufTestDummy(int mana, int health, int speed, const std:
 	, m_speed(speed)
 	, m_name(name)
 {
+	UpdateSerializedCache();
+}
+
+ProtobufTestDummy::ProtobufTestDummy(const Bytes& bytes)
+{
+	poc::ProtobufTestDummy proto = ToProtobuf();
+	proto.ParseFromArray(bytes.first, bytes.second);
+
+	m_health = proto.health();
+	m_mana = proto.mana();
+	m_speed = proto.speed();
+	m_name = proto.name();
+
+	UpdateSerializedCache();
 }
 
 ProtobufTestDummy::~ProtobufTestDummy()
 {
-
 }
 
-std::pair<uint8_t*, int> ProtobufTestDummy::ToBytes() const
+ProtobufTestDummy ProtobufTestDummy::FromBytes(const Bytes& bytes) const
 {
-	poc::ProtobufTestDummy testProto = ToProtobuf();
+	poc::ProtobufTestDummy proto;
+	proto.ParseFromArray(bytes.first, bytes.second);
+	return ProtobufTestDummy{ proto.mana(), proto.health(), proto.speed(), proto.name() };
+}
 
-	// Serialize the protobuf message to string.
-	std::string serializedProto = testProto.SerializeAsString();
-
-	auto buffer = std::make_unique<uint8_t[]>(serializedProto.length());
-	std::memcpy(buffer.get(), &serializedProto, serializedProto.length());
-
-	return { buffer.get(), testProto.ByteSize() };
+const std::string& ProtobufTestDummy::ToString() const
+{
+	return m_serializedStringCache;
 }
 
 ProtobufTestDummy ProtobufTestDummy::FromProtobuf(const poc::ProtobufTestDummy* creatureProto) const
@@ -55,6 +67,17 @@ poc::ProtobufTestDummy ProtobufTestDummy::ToProtobuf() const
 	protobufTestDummy.set_name(m_name);
 
 	return protobufTestDummy;
+}
+
+void ProtobufTestDummy::UpdateSerializedCache()
+{
+	if (m_isCacheDirty)
+	{
+		m_isCacheDirty = false;
+
+		// Serialize the protobuf message to string.
+		m_serializedStringCache = ToProtobuf().SerializeAsString();
+	}
 }
 
 //===============================================================================

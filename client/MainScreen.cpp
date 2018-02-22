@@ -5,6 +5,7 @@
 
 #include "MainScreen.h"
 
+#include "client/Application.h"
 #include "client/NetworkController.h"
 #include "common/Log.h"
 #include "common/MessageParser.h"
@@ -27,11 +28,11 @@ namespace
 	const std::string s_fontPath = "resources/fonts/arial.ttf";
 }
 
-MainScreen::MainScreen(sf::RenderWindow* window)
+MainScreen::MainScreen(Application* application, sf::RenderWindow* window)
 	: m_window(window)
 	, m_font(new sf::Font)
-	, m_networkController(new NetworkController)
-	, m_protobufTestDummy(new Common::Test::ProtobufTestDummy{ 16, 14, 8, "Dragon" })
+	, m_application(application)
+	, m_protobufTestDummy(new Common::Test::ProtobufTestDummy{ -16, 14, 8, "Dragon" })
 	, m_parseTester(new Common::Test::MessageParserTest)
 {
 	if (!m_font->loadFromFile(s_fontPath))
@@ -83,7 +84,7 @@ void MainScreen::Draw()
 	sendMessageText.setFont(*m_font.get());
 	sendMessageText.setString("Press 's' to send a message to Server.");
 
-	m_window->draw(m_networkController->IsConnected() ? sendMessageText : connectText);
+	m_window->draw(m_application->GetNetworkController()->IsConnected() ? sendMessageText : connectText);
 
 	m_window->display();
 }
@@ -108,9 +109,10 @@ void MainScreen::HandleKeyPress(const sf::Event::KeyEvent& e)
 
 void MainScreen::ConnectToServer()
 {
-	m_networkController->ConnectToServer();
+	NetworkController* controller = m_application->GetNetworkController();
+	controller->ConnectToServer();
 
-	if (m_networkController->IsConnected())
+	if (controller->IsConnected())
 	{
 		m_shouldConnect = false;
 	}
@@ -118,10 +120,10 @@ void MainScreen::ConnectToServer()
 
 void MainScreen::SendTestMessageToServer()
 {
-	auto& creatureBytes = m_protobufTestDummy->ToBytes();
+	auto creatureString = m_protobufTestDummy->ToString();
 
-	m_networkController->SendMessageToServer(Common::MessageType::Creature, creatureBytes.first,
-		creatureBytes.second);
+	m_application->GetNetworkController()->SendMessageToServer(Common::MessageType::Creature,
+		creatureString);
 }
 
 //===============================================================================

@@ -26,8 +26,14 @@ public:
 
 	// Connect to the server at the specified address.
 	void ConnectToServer(const std::string& address = std::string(), int port = 0);
-	void SendMessageToServer(Common::MessageType type, uint8_t message[], uint32_t messageLength);
 
+	// Will queue a message up to get sent to the server.
+	void SendMessageToServer(Common::MessageType type, const std::string& message);
+
+	// Called from the main loop. This will send any queued messages and receive anything from over the wire.
+	void Process();
+
+	// Returns whether we're currently connected to the server.
 	bool IsConnected() const;
 
 private:

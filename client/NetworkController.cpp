@@ -79,14 +79,25 @@ void NetworkController::ConnectToServer(const std::string& address, int port)
 	}
 }
 
-void NetworkController::SendMessageToServer(Common::MessageType type, uint8_t message[], uint32_t messageLength)
+void NetworkController::SendMessageToServer(Common::MessageType type, const std::string& message)
 {
-	m_networkHelper->QueueMessage(type, message, messageLength);
+	m_networkHelper->QueueMessage(type, message);
 }
 
 bool NetworkController::IsConnected() const
 {
 	return m_connection->IsConnected();
+}
+
+void NetworkController::Process()
+{
+	// TODO: This is an unreliable way to check connectivity. Perhaps there is no way
+	// to do this, so handle what happens when we're not connected yet.
+	if (IsConnected())
+	{
+		m_networkHelper->SendMessages(m_connection.get());
+		m_networkHelper->ReceiveMessages(m_connection.get());
+	}
 }
 
 //===============================================================================

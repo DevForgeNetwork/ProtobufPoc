@@ -29,11 +29,12 @@ namespace Client {
 //===============================================================================
 
 class NetworkController;
+class Application;
 
 class MainScreen : public Screen
 {
 public:
-	MainScreen(sf::RenderWindow* window);
+	MainScreen(Application* application, sf::RenderWindow* window);
 	~MainScreen();
 
 	// Screen impl.
@@ -51,11 +52,10 @@ private:
 private:
 	sf::RenderWindow* m_window;
 	std::unique_ptr<sf::Font> m_font;
+	Application* m_application;
 
 	std::unique_ptr<Common::Test::ProtobufTestDummy> m_protobufTestDummy;
 	std::unique_ptr<Common::Test::MessageParserTest> m_parseTester;
-	std::unique_ptr<NetworkController> m_networkController;
-
 	bool m_shouldConnect = false;
 };
 

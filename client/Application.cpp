@@ -17,7 +17,7 @@ namespace Client {
 
 Application::Application()
 	: m_mainWindow(new sf::RenderWindow(sf::VideoMode(640, 480), "Client"))
-	, m_screen(new MainScreen(m_mainWindow.get()))
+	, m_screen(new MainScreen(this, m_mainWindow.get()))
 	, m_networkController(new NetworkController)
 {
 	m_mainWindow->setFramerateLimit(60);
@@ -33,6 +33,8 @@ void Application::Run()
 	{
 		m_screen->ProcessEvents();
 		m_screen->Draw();
+
+		m_networkController->Process();
 	}
 }
 
