@@ -13,7 +13,7 @@ namespace Common {
 
 //===============================================================================
 
-using Bytes = std::pair<const uint8_t*, uint32_t>;
+using Bytes = std::pair<const char*, uint32_t>;
 
 // Convert back and forth between proto and class representation of it.
 // proto, class representation.

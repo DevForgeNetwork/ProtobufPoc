@@ -5,15 +5,14 @@
 
 #pragma once
 
-#include "ByteBuffer.h"
-
 #include <memory>
+#include <string>
 
 namespace Common {
 
 //===============================================================================
 
-enum struct MessageType : uint32_t
+enum struct MessageId : uint32_t
 {
 	  None
 	, Creature
@@ -25,11 +24,11 @@ struct MessageHeader
 {
 	void Clear()
 	{
-		messageType = MessageType::None;
+		messageType = MessageId::None;
 		messageLength = 0;
 	};
 
-	MessageType messageType = MessageType::None;
+	MessageId messageType = MessageId::None;
 	uint32_t messageLength = 0;
 };
 
@@ -48,7 +47,7 @@ struct NetworkMessage
 	}
 
 	MessageHeader header;
-	ByteBuffer messageData;
+	std::string messageData;
 };
 
 

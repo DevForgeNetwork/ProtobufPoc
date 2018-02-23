@@ -102,13 +102,12 @@ void NetworkHelper::ReceiveMessages(Connection* connection)
 		return;
 	}
 
-	// NYI: populate the messages with whatever we received.
 	uint32_t received = 0;
-	uint8_t data[s_maxSizeReceived];
+	char data[s_maxSizeReceived];
 	connection->socket->receive(data, s_maxSizeReceived, received);
 
 	std::vector<NetworkMessage> messages;
-	m_parser->ParseMessage(data, received, messages);
+	m_parser->ParseMessage(std::string(data, received), messages);
 
 	if (!messages.empty())
 	{
@@ -117,7 +116,7 @@ void NetworkHelper::ReceiveMessages(Connection* connection)
 	}
 }
 
-void NetworkHelper::QueueMessage(MessageType type, const std::string& message)
+void NetworkHelper::QueueMessage(MessageId type, const std::string& message)
 {
 	LOG_DEBUG("Queuing Message to send to Server");
 
@@ -132,9 +131,9 @@ void NetworkHelper::HandleMessages(const std::vector<NetworkMessage>& messages)
 {
 	for (auto it = std::cbegin(messages); it != std::cend(messages); ++it)
 	{
-		if (it->header.messageType == MessageType::Creature)
+		if (it->header.messageType == MessageId::Creature)
 		{
-			Common::Test::ProtobufTestDummy dummy(std::make_pair(it->messageData.GetData(),
+			Common::Test::ProtobufTestDummy dummy(std::make_pair(it->messageData.data(),
 				it->header.messageLength));
 
 			LOG_DEBUG("ProtobufDummy Creation Succeeded."

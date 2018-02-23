@@ -11,7 +11,7 @@
 namespace Common {
 	class Connection;
 	class NetworkHelper;
-	enum struct MessageType : uint32_t;
+	enum struct MessageId : uint32_t;
 }
 
 namespace Client {
@@ -28,7 +28,7 @@ public:
 	void ConnectToServer(const std::string& address = std::string(), int port = 0);
 
 	// Will queue a message up to get sent to the server.
-	void SendMessageToServer(Common::MessageType type, const std::string& message);
+	void SendMessageToServer(Common::MessageId type, const std::string& message);
 
 	// Called from the main loop. This will send any queued messages and receive anything from over the wire.
 	void Process();

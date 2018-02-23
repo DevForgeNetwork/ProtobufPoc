@@ -5,7 +5,6 @@
 
 #pragma once
 
-// TODO: Forward declare MessageHeader.
 #include "NetworkTypes.h"
 
 #include <memory>
@@ -51,7 +50,7 @@ public:
 
 	// Queues a message to be sent the next time SendMessages is called. The type is needed so it can be
 	// packaged with the message.
-	void QueueMessage(MessageType type, const std::string& message);
+	void QueueMessage(MessageId type, const std::string& message);
 
 	void HandleMessages(const std::vector<NetworkMessage>& messages);
 private:

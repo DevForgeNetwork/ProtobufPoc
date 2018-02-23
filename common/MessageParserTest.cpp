@@ -5,7 +5,6 @@
 
 #include "MessageParserTest.h"
 
-#include "ByteBuffer.h"
 #include "Log.h"
 #include "MessageParser.h"
 #include "NetworkTypes.h"
@@ -114,7 +113,7 @@ namespace Test {
 
 namespace
 {
-	const MessageHeader s_header{ MessageType::Attack, 14 };
+	const MessageHeader s_header{ MessageId::Attack, 14 };
 	const char s_messageData[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n' };
 	const int s_messageDataSize = 14;
 	const int s_bufferSize = 64000;
@@ -150,11 +149,11 @@ void MessageParserTest::ClearBuffer(uint8_t buffer[], int size)
 void MessageParserTest::Verify(const NetworkMessage& message)
 {
 	assert(message.header.messageLength == 14);
-	assert(message.header.messageType == MessageType::Attack);
-	assert(message.messageData.GetSize() == 14);
+	assert(message.header.messageType == MessageId::Attack);
+	assert(message.messageData.size() == 14);
 	for (int i = 0; i < 14; ++i)
 	{
-		assert(message.messageData.GetData()[i] == s_messageData[i]);
+		assert(message.messageData[i] == s_messageData[i]);
 	}
 }
 
@@ -171,7 +170,7 @@ void MessageParserTest::TestSingle()
 	std::memcpy(netBuffer.get(), &s_header, sizeof(s_header));
 	std::memcpy(netBuffer.get() + sizeof(s_header), s_messageData, s_messageDataSize);
 
-	hasMessages = m_parser->ParseMessage(netBuffer.get(), 22, messages);
+	hasMessages = m_helper.ParseMessageForward(netBuffer.get(), 22, messages);
 
 	assert(hasMessages);
 	Verify(messages[0]);
@@ -198,7 +197,7 @@ void MessageParserTest::TestMulti()
 		currentSize += s_messageDataSize;
 	}
 
-	hasMessages = m_parser->ParseMessage(netBuffer.get(), currentSize, messages);
+	hasMessages = m_helper.ParseMessageForward(netBuffer.get(), currentSize, messages);
 	assert(hasMessages);
 	for (auto it = std::begin(messages); it != messages.end(); ++it)
 	{
@@ -294,7 +293,7 @@ void MessageParserTest::TestUneven()
 
 	// First 2 bytes of header.
 	std::memcpy(netBuffer.get() + 1, &s_header, 2);
-	hasMessages = m_parser->ParseMessage(netBuffer.get(), 3, messages);
+	hasMessages = m_helper.ParseMessageForward(netBuffer.get(), 3, messages);
 	assert(hasMessages);
 	ClearBuffer(netBuffer.get(), 3);
 
@@ -305,7 +304,7 @@ void MessageParserTest::TestUneven()
 	// Full next message.
 	std::memcpy(netBuffer.get(), temp.get() + 2, 6);
 	std::memcpy(netBuffer.get() + 6, s_messageData, 14);
-	hasMessages = m_parser->ParseMessage(netBuffer.get(), 20, messages);
+	hasMessages = m_helper.ParseMessageForward(netBuffer.get(), 20, messages);
 
 	assert(hasMessages);
 	ClearBuffer(netBuffer.get(), 20);
@@ -339,7 +338,7 @@ void MessageParserTest::TestUneven()
 
 	// message data of message 2.
 	std::memcpy(netBuffer.get() + 14, s_messageData, 14);
-	hasMessages = m_parser->ParseMessage(netBuffer.get(), 28 , messages);
+	hasMessages = m_helper.ParseMessageForward(netBuffer.get(), 28 , messages);
 	assert(hasMessages);
 	assert(messages.size() == 2);
 
@@ -386,7 +385,7 @@ void MessageParserTest::TestUneven()
 		currentSize += s_messageDataSize;
 	}
 
-	hasMessages = m_parser->ParseMessage(netBuffer.get(), currentSize, messages);
+	hasMessages = m_helper.ParseMessageForward(netBuffer.get(), currentSize, messages);
 	assert(hasMessages);
 	assert(messages.size() == numMessagesToSend + 2);
 
@@ -430,10 +429,18 @@ void MessageParserTest::MessageHelper::Clear()
 	m_sizeSent = 0;
 }
 
-void MessageParserTest::MessageHelper::SendPartialData(uint8_t data[], int sizeToSend,
+bool MessageParserTest::MessageHelper::ParseMessageForward(uint8_t* data, int size, std::vector<NetworkMessage>& messages)
+{
+	std::string str;
+	str.resize(size);
+	std::memcpy(&str[0], data, size);
+	return m_tester->m_parser->ParseMessage(str, messages);
+}
+
+void MessageParserTest::MessageHelper::SendPartialData(uint8_t* data, int sizeToSend,
 	std::vector<NetworkMessage>& messages, bool& hasMessages)
 {
-	hasMessages = m_tester->m_parser->ParseMessage(data, sizeToSend, messages);
+	hasMessages = ParseMessageForward(data, sizeToSend, messages);
 	m_tester->ClearBuffer(data, sizeToSend);
 	if (hasMessages)
 	{

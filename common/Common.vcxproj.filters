@@ -47,9 +47,6 @@
     <ClCompile Include="MessageParser.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
-    <ClCompile Include="ByteBuffer.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
     <ClCompile Include="MessageParserTest.cpp">
       <Filter>Source Files\Test</Filter>
     </ClCompile>
@@ -71,9 +68,6 @@
       <Filter>Header Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="MessageParser.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="ByteBuffer.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="MessageParserTest.h">

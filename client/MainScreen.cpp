@@ -10,6 +10,7 @@
 #include "common/Log.h"
 #include "common/MessageParser.h"
 #include "common/MessageParserTest.h"
+#include "common/NetworkTypes.h"
 #include "common/ProtobufTestDummy.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -122,7 +123,7 @@ void MainScreen::SendTestMessageToServer()
 {
 	auto creatureString = m_protobufTestDummy->ToString();
 
-	m_application->GetNetworkController()->SendMessageToServer(Common::MessageType::Creature,
+	m_application->GetNetworkController()->SendMessageToServer(Common::MessageId::Creature,
 		creatureString);
 }
 

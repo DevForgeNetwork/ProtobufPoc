@@ -46,8 +46,11 @@ private:
 		// This should be called between sending a header and a message.
 		void Clear();
 
+		// Wrapper for ParseMessage.
+		bool ParseMessageForward(uint8_t* data, int size, std::vector<NetworkMessage>& messages);
+
 	private:
-		void SendPartialData(uint8_t data[], int sizeToSend,
+		void SendPartialData(uint8_t* data, int sizeToSend,
 			std::vector<NetworkMessage>& messages, bool& hasMessages);
 
 	private:

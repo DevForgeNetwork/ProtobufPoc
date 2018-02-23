@@ -132,7 +132,6 @@
     <ProtocolBuffer Include="proto\poc.proto" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ByteBuffer.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="MessageParser.cpp" />
     <ClCompile Include="MessageParserTest.cpp" />
@@ -141,7 +140,6 @@
     <ClCompile Include="proto\poc.pb.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ByteBuffer.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="MessageParser.h" />
     <ClInclude Include="MessageParserTest.h" />
